@@ -1,1 +1,1113 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zotero Connector Setup - Epitope Erase Project</title>
+    <style>
+        :root {
+            --uwp-primary: #4B286D;
+            --uwp-secondary: #0069B4;
+            --uwp-accent: #43B02A;
+            --uwp-neutral: #F2F2F2;
+            --uwp-light: #FFFFFF;
+            --uwp-dark: #1A1A1A;
+            --uwp-text: #333333;
+            --uwp-card-bg: #FFFFFF;
+            --uwp-border: #D9D9D9;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            line-height: 1.6;
+            padding: 0;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--uwp-primary) 0%, var(--uwp-secondary) 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-icon {
+            background-color: white;
+            color: var(--uwp-primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .logo-text h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-text p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .research-context {
+            background-color: rgba(67, 176, 42, 0.1);
+            border-left: 4px solid var(--uwp-accent);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .research-context h3 {
+            color: var(--uwp-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Setup Steps */
+        .step-card {
+            background-color: var(--uwp-card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid var(--uwp-secondary);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-number {
+            background-color: var(--uwp-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            color: var(--uwp-secondary);
+        }
+        
+        .step-content {
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content h4 {
+            color: var(--uwp-primary);
+            margin: 1.5rem 0 0.8rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .step-content ul, .step-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content li {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Browser Cards */
+        .browser-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .browser-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .browser-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--uwp-secondary);
+        }
+        
+        .browser-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .browser-name {
+            font-weight: 600;
+            color: var(--uwp-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Code/Technical Blocks */
+        code {
+            background-color: #f1f3f5;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d63384;
+        }
+        
+        .url-box {
+            background-color: #f8f9ff;
+            border: 1px solid #d0d7ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* Database Cards */
+        .database-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .database-card {
+            background-color: #f0f7ff;
+            border: 1px solid #cce0ff;
+            border-radius: 6px;
+            padding: 1.2rem;
+        }
+        
+        .database-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--uwp-secondary);
+        }
+        
+        .database-name {
+            font-weight: 600;
+            color: var(--uwp-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Save Button Demo */
+        .save-button-demo {
+            background-color: #f8f9fa;
+            border: 2px dashed var(--uwp-border);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .save-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--uwp-secondary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+        
+        .save-button:hover {
+            background-color: #005593;
+            transform: scale(1.05);
+        }
+        
+        /* Screenshot Placeholders */
+        .screenshot {
+            background-color: #f8f9fa;
+            border: 1px solid var(--uwp-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .screenshot img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+        }
+        
+        /* Alert Boxes */
+        .tip-box {
+            background-color: #e8f4ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        .success-box {
+            background-color: #d1fae5;
+            border-left: 4px solid var(--uwp-accent);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--uwp-secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #005593;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            border: 1px solid var(--uwp-border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--uwp-border);
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--uwp-border);
+            z-index: 1;
+        }
+        
+        .progress-step.active::after {
+            background-color: var(--uwp-accent);
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            z-index: 2;
+            border: 2px solid var(--uwp-border);
+        }
+        
+        .progress-step.active .step-circle {
+            background-color: var(--uwp-accent);
+            color: white;
+            border-color: var(--uwp-accent);
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-step.active .step-label {
+            color: var(--uwp-primary);
+            font-weight: 600;
+        }
+        
+        /* Test Section */
+        .test-section {
+            background-color: #f8f9ff;
+            border: 2px solid var(--uwp-secondary);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .test-instruction {
+            background-color: white;
+            border: 1px solid var(--uwp-border);
+            border-radius: 6px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .step-card {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .progress-indicator {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .browser-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-link">← Back to Epitope Erase Dashboard</a>
+            <div class="logo-container">
+                <div class="logo-icon">🔌</div>
+                <div class="logo-text">
+                    <h1>Zotero Connector Setup Guide</h1>
+                    <p>Browser Integration for Enzymatic Allergen Research</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="research-context">
+            <h3>🔬 Research Context: Epitope Erase Project</h3>
+            <p>The Zotero Connector is essential for quickly saving enzymatic allergen research papers directly from your browser. Configure it to automatically tag and organize papers on protease applications, sprayable formulations, and allergen detection methods.</p>
+        </div>
+        
+        <div class="progress-indicator">
+            <div class="progress-step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">Install Connector</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">2</div>
+                <div class="step-label">Configure Settings</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Test & Optimize</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">4</div>
+                <div class="step-label">Advanced Features</div>
+            </div>
+        </div>
+        
+        <!-- Step 1: Installation -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2 class="step-title">Install Zotero Connector for Your Browser</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>The Zotero Connector is a browser extension that detects scholarly content and saves it to your Zotero library with one click. It works with 100+ academic databases and websites.</p>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Prerequisite Check</h4>
+                    <p>Ensure Zotero Standalone is installed and running before proceeding. The Connector needs the desktop app to function properly.</p>
+                </div>
+                
+                <h4>Choose Your Browser:</h4>
+                
+                <div class="browser-grid">
+                    <div class="browser-card" onclick="showInstallSteps('chrome')">
+                        <div class="browser-icon">🌐</div>
+                        <div class="browser-name">Google Chrome</div>
+                        <p>Most popular browser with full Zotero support</p>
+                    </div>
+                    
+                    <div class="browser-card" onclick="showInstallSteps('firefox')">
+                        <div class="browser-icon">🦊</div>
+                        <div class="browser-name">Mozilla Firefox</div>
+                        <p>Open-source browser with excellent Zotero integration</p>
+                    </div>
+                    
+                    <div class="browser-card" onclick="showInstallSteps('edge')">
+                        <div class="browser-icon">🚀</div>
+                        <div class="browser-name">Microsoft Edge</div>
+                        <p>Chromium-based with full Chrome extension support</p>
+                    </div>
+                    
+                    <div class="browser-card" onclick="showInstallSteps('safari')">
+                        <div class="browser-icon">🍎</div>
+                        <div class="browser-name">Safari</div>
+                        <p>macOS native browser with Zotero support</p>
+                    </div>
+                </div>
+                
+                <!-- Chrome Installation Steps -->
+                <div id="chrome-steps" class="browser-install-steps" style="display: none;">
+                    <h4>Chrome Installation Steps:</h4>
+                    <ol>
+                        <li>Open Chrome and go to: <span class="url-box">https://chrome.google.com/webstore/detail/zotero-connector/ekhagklcjbdpajgpjgmbionohlpdbjgc</span></li>
+                        <li>Click <strong>"Add to Chrome"</strong> button</li>
+                        <li>Confirm by clicking <strong>"Add extension"</strong> in the pop-up</li>
+                        <li>Wait for installation to complete</li>
+                        <li>You should see the Zotero Connector icon (<span style="color: #0069B4; font-weight: bold;">Z</span>) in your browser toolbar</li>
+                    </ol>
+                </div>
+                
+                <!-- Firefox Installation Steps -->
+                <div id="firefox-steps" class="browser-install-steps" style="display: none;">
+                    <h4>Firefox Installation Steps:</h4>
+                    <ol>
+                        <li>Open Firefox and go to: <span class="url-box">https://www.zotero.org/download/connector?format=firefox</span></li>
+                        <li>Click <strong>"Add to Firefox"</strong> button</li>
+                        <li>Confirm by clicking <strong>"Add"</strong> in the pop-up</li>
+                        <li>Wait for installation to complete</li>
+                        <li>You should see the Zotero Connector icon (<span style="color: #0069B4; font-weight: bold;">Z</span>) in your browser toolbar</li>
+                    </ol>
+                </div>
+                
+                <!-- Edge Installation Steps -->
+                <div id="edge-steps" class="browser-install-steps" style="display: none;">
+                    <h4>Edge Installation Steps:</h4>
+                    <ol>
+                        <li>Open Edge and go to: <span class="url-box">https://microsoftedge.microsoft.com/addons/detail/zotero-connector/dfgmbgppnmhlicfkodjggjogljhdhdgb</span></li>
+                        <li>Click <strong>"Get"</strong> button</li>
+                        <li>Confirm by clicking <strong>"Add extension"</strong> in the pop-up</li>
+                        <li>Wait for installation to complete</li>
+                        <li>You should see the Zotero Connector icon (<span style="color: #0069B4; font-weight: bold;">Z</span>) in your browser toolbar</li>
+                    </ol>
+                </div>
+                
+                <!-- Safari Installation Steps -->
+                <div id="safari-steps" class="browser-install-steps" style="display: none;">
+                    <h4>Safari Installation Steps:</h4>
+                    <ol>
+                        <li>Open Safari and go to: <span class="url-box">https://apps.apple.com/app/zotero-connector/id1516140339</span></li>
+                        <li>Click <strong>"Get"</strong> button</li>
+                        <li>Download and install from the Mac App Store</li>
+                        <li>Enable the extension in Safari Preferences → Extensions</li>
+                        <li>You should see the Zotero Connector icon (<span style="color: #0069B4; font-weight: bold;">Z</span>) in your Safari toolbar</li>
+                    </ol>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>🎯 Installation Verification</h4>
+                    <p>After installation, you should see a Zotero icon (<span style="color: #0069B4; font-weight: bold;">Z</span>) in your browser toolbar. If not, check your browser's extension management page and ensure it's enabled.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Configuration -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2 class="step-title">Configure Connector for Enzymatic Research</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Proper configuration ensures papers are automatically tagged and saved to the correct collections for your enzymatic allergen research.</p>
+                
+                <div class="screenshot">
+                    <p>[Image: Zotero Connector settings interface]</p>
+                    <p>Visual showing Zotero Connector options with default collection and tags highlighted</p>
+                </div>
+                
+                <h4>Access Connector Settings:</h4>
+                <ol>
+                    <li>Click the Zotero icon (<span style="color: #0069B4; font-weight: bold;">Z</span>) in your browser toolbar</li>
+                    <li>Click the gear/settings icon in the pop-up menu</li>
+                    <li>Select <strong>"Preferences"</strong></li>
+                </ol>
+                
+                <h4>Essential Configuration Settings:</h4>
+                
+                <div class="database-grid">
+                    <div class="database-card">
+                        <div class="database-icon">📁</div>
+                        <div class="database-name">Default Collection</div>
+                        <p><strong>Set to:</strong> Epitope Erase Research</p>
+                        <p>All saved papers will automatically go to this collection</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">🏷️</div>
+                        <div class="database-name">Automatic Tags</div>
+                        <p><strong>Add tags:</strong> enzymatic_cleaning, protease, saved_from_web</p>
+                        <p>These tags will be added to every paper you save</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">📄</div>
+                        <div class="database-name">PDF Handling</div>
+                        <p><strong>Settings:</strong> Save PDFs automatically when available</p>
+                        <p>Attach PDFs to saved references automatically</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">🔍</div>
+                        <div class="database-name">Snapshot Feature</div>
+                        <p><strong>Enable:</strong> Save webpage snapshots</p>
+                        <p>Creates local copies of webpages for offline access</p>
+                    </div>
+                </div>
+                
+                <h4>Advanced Configuration:</h4>
+                <ol>
+                    <li><strong>Library Selection:</strong> Ensure your "Epitope Erase Research" library is selected</li>
+                    <li><strong>Automatic Categorization:</strong> Enable automatic detection of paper type (journal article, conference paper, etc.)</li>
+                    <li><strong>Proxy Settings:</strong> If accessing papers through institutional proxy, configure proxy settings for full-text access</li>
+                    <li><strong>Keyboard Shortcuts:</strong> Set up shortcuts for quick saving (e.g., Alt+Z)</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>⚙️ Database-Specific Configuration</h4>
+                    <p>Some databases need special configuration:
+                    <br>1. <strong>PubMed:</strong> Enable RIS export compatibility
+                    <br>2. <strong>Google Scholar:</strong> Configure library links in Google Scholar settings
+                    <br>3. <strong>IEEE Xplore:</strong> Enable RIS/Citation export
+                    <br>4. <strong>ScienceDirect:</strong> Works best with institutional access</p>
+                </div>
+                
+                <h4>Supported Databases for Enzymatic Research:</h4>
+                <div class="database-grid">
+                    <div class="database-card">
+                        <div class="database-icon">📚</div>
+                        <div class="database-name">PubMed</div>
+                        <p>Medical/biological papers on enzyme applications</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">⚗️</div>
+                        <div class="database-name">ACS Publications</div>
+                        <p>Chemistry papers on enzyme mechanisms</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">🔬</div>
+                        <div class="database-name">ScienceDirect</div>
+                        <p>Elsevier journals on food science</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">🌐</div>
+                        <div class="database-name">Google Scholar</div>
+                        <p>Broad academic search with Connector support</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Testing -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2 class="step-title">Test & Optimize Your Setup</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Test your Zotero Connector with actual research papers to ensure everything works correctly for your enzymatic allergen studies.</p>
+                
+                <div class="test-section">
+                    <h4>🧪 Test Procedure</h4>
+                    <p>Follow these steps to test your Zotero Connector:</p>
+                    
+                    <div class="test-instruction">
+                        <h5>Test 1: Basic Saving</h5>
+                        <ol>
+                            <li>Visit this test article: <span class="url-box">https://pubmed.ncbi.nlm.nih.gov/30003958/</span></li>
+                            <li>Click the Zotero icon (<span style="color: #0069B4; font-weight: bold;">Z</span>) in your toolbar</li>
+                            <li>Observe the icon change to indicate detection</li>
+                            <li>Click to save the reference</li>
+                            <li>Check Zotero desktop app for the saved paper</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="test-instruction">
+                        <h5>Test 2: Enzymatic Research Paper</h5>
+                        <ol>
+                            <li>Search for: "subtilisin allergen removal surface" in Google Scholar</li>
+                            <li>Find a relevant paper and click the Zotero icon</li>
+                            <li>Verify PDF is attached (if available)</li>
+                            <li>Check that tags "enzymatic_cleaning" and "protease" are applied</li>
+                            <li>Confirm paper is in "Epitope Erase Research" collection</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="test-instruction">
+                        <h5>Test 3: Multiple Items</h5>
+                        <ol>
+                            <li>Visit a search results page (e.g., PubMed search results)</li>
+                            <li>Click the folder icon in the Zotero Connector</li>
+                            <li>Select multiple papers to save at once</li>
+                            <li>Verify all are saved with correct metadata</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <h4>Expected Results:</h4>
+                <div class="success-box">
+                    <h4>✅ Success Indicators</h4>
+                    <p>1. Paper appears in Zotero within 5 seconds
+                    <br>2. Metadata (author, title, journal) is complete
+                    <br>3. PDF is attached (if available through your access)
+                    <br>4. Tags are applied correctly
+                    <br>5. Paper is in the correct collection</p>
+                </div>
+                
+                <h4>Troubleshooting Common Issues:</h4>
+                
+                <div class="database-grid">
+                    <div class="database-card">
+                        <div class="database-icon">❓</div>
+                        <div class="database-name">Icon Not Appearing</div>
+                        <p><strong>Solution:</strong> Refresh page, check if Zotero desktop is running</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">📄</div>
+                        <div class="database-name">PDF Not Attaching</div>
+                        <p><strong>Solution:</strong> Check institutional access, try manual PDF save</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">🏷️</div>
+                        <div class="database-name">Tags Not Applied</div>
+                        <p><strong>Solution:</strong> Recheck Connector settings, restart browser</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">⚡</div>
+                        <div class="database-name">Slow Saving</div>
+                        <p><strong>Solution:</strong> Check internet connection, reduce Zotero library size</p>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>🔧 Optimization Tips</h4>
+                    <p>1. <strong>Keyboard Shortcuts:</strong> Set Alt+Z for quick saving
+                    <br>2. <strong>Right-click Menu:</strong> Enable "Save to Zotero" in browser context menu
+                    <br>3. <strong>Multiple Selection:</strong> Use folder icon on search result pages
+                    <br>4. <strong>Automation:</strong> Create rules for auto-tagging specific journals</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4: Advanced Features -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2 class="step-title">Advanced Features & Workflow Integration</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Leverage advanced Zotero Connector features to streamline your enzymatic research workflow.</p>
+                
+                <h4>1. ResearchRabbit Integration:</h4>
+                <ol>
+                    <li>Install both Zotero Connector and ResearchRabbit</li>
+                    <li>In ResearchRabbit, export papers directly to Zotero</li>
+                    <li>Use Zotero Connector to save additional papers found through ResearchRabbit recommendations</li>
+                    <li>Create a seamless workflow: ResearchRabbit → Zotero Connector → Zotero Library</li>
+                </ol>
+                
+                <h4>2. Snapshot Feature for Web Content:</h4>
+                <p>Save non-traditional content like:</p>
+                <ul>
+                    <li>Manufacturer specifications for enzyme products</li>
+                    <li>Regulatory agency guidelines (FDA, EFSA)</li>
+                    <li>Industry white papers on cleaning protocols</li>
+                    <li>Conference presentation slides</li>
+                </ul>
+                
+                <div class="screenshot">
+                    <p>[Image: Zotero snapshot feature saving a webpage]</p>
+                    <p>Visual showing webpage being saved as a snapshot with full formatting</p>
+                </div>
+                
+                <h4>3. Mobile Integration:</h4>
+                <div class="database-grid">
+                    <div class="database-card">
+                        <div class="database-icon">📱</div>
+                        <div class="database-name">Zotero Mobile App</div>
+                        <p>Access your library on mobile devices</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">📲</div>
+                        <div class="database-name">Browser on Mobile</div>
+                        <p>Use "Share" feature to save to Zotero</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">☁️</div>
+                        <div class="database-name">Cloud Sync</div>
+                        <p>All devices sync via Zotero cloud</p>
+                    </div>
+                </div>
+                
+                <h4>4. Custom Translators for Specialized Databases:</h4>
+                <p>Some enzymatic research databases may need custom configuration:</p>
+                <div class="technical-box">
+                    For databases not natively supported:
+                    1. Right-click Zotero Connector icon → "Manage Translators"
+                    2. Search for custom translator for your database
+                    3. Install and test with a sample paper
+                    4. Report issues to Zotero translator repository
+                </div>
+                
+                <h4>5. Automated Workflow for Enzymatic Research:</h4>
+                <ol>
+                    <li><strong>Discovery:</strong> Find papers via ResearchRabbit, Google Scholar, PubMed</li>
+                    <li><strong>Capture:</strong> Save with Zotero Connector (auto-tagged)</li>
+                    <li><strong>Organization:</strong> Papers auto-sorted into "Epitope Erase Research" collection</li>
+                    <li><strong>Reading:</strong> Annotate PDFs within Zotero</li>
+                    <li><strong>Citation:</strong> Cite in papers using Word/LibreOffice plugins</li>
+                </ol>
+                
+                <div class="save-button-demo">
+                    <h4>Try the Save Button:</h4>
+                    <button class="save-button" onclick="simulateSave()">
+                        <span>💾</span> Save to Zotero
+                    </button>
+                    <p>This simulates what the Zotero Connector button looks like when you're on a research paper page.</p>
+                    <p id="save-feedback" style="margin-top: 1rem; font-weight: 600; color: var(--uwp-accent);"></p>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Security Considerations</h4>
+                    <p>1. <strong>Private Papers:</strong> Ensure sensitive research is in private collections
+                    <br>2. <strong>PDF Access:</strong> Be cautious with papers behind paywalls
+                    <br>3. <strong>Syncing:</strong> Use secure passwords for Zotero account
+                    <br>4. <strong>Backup:</strong> Regularly backup your Zotero data folder</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="step-card">
+            <div class="step-header">
+                <h2 class="step-title">✅ Setup Complete - Integration Checklist</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Your Zotero Connector is now ready for enzymatic allergen research. Verify all components are working:</p>
+                
+                <h4>Final Verification Checklist:</h4>
+                <ol>
+                    <li>✓ Zotero Connector installed in browser</li>
+                    <li>✓ Zotero desktop app running in background</li>
+                    <li>✓ Default collection set to "Epitope Erase Research"</li>
+                    <li>✓ Automatic tags configured (enzymatic_cleaning, protease)</li>
+                    <li>✓ PDF auto-save enabled</li>
+                    <li>✓ Test papers save correctly with metadata</li>
+                    <li>✓ ResearchRabbit integration working</li>
+                    <li>✓ Mobile access configured (if needed)</li>
+                </ol>
+                
+                <h4>Next Steps in Your Research Workflow:</h4>
+                <div class="database-grid">
+                    <div class="database-card">
+                        <div class="database-icon">🔍</div>
+                        <div class="database-name">Start Searching</div>
+                        <p>Begin collecting papers on enzymatic allergen removal</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">🏷️</div>
+                        <div class="database-name">Organize & Tag</div>
+                        <p>Review saved papers and add additional tags</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">📝</div>
+                        <div class="database-name">Take Notes</div>
+                        <p>Add research notes to saved papers in Zotero</p>
+                    </div>
+                    
+                    <div class="database-card">
+                        <div class="database-icon">📊</div>
+                        <div class="database-name">Analyze Literature</div>
+                        <p>Use Zotero's reporting features to analyze your collection</p>
+                    </div>
+                </div>
+                
+                <h4>Maintenance Schedule:</h4>
+                <ul>
+                    <li><strong>Weekly:</strong> Check for Zotero Connector updates</li>
+                    <li><strong>Monthly:</strong> Review and clean up tags</li>
+                    <li><strong>Quarterly:</strong> Backup Zotero library</li>
+                    <li><strong>As needed:</strong> Update saved searches and alerts</li>
+                </ul>
+                
+                <div class="success-box">
+                    <h4>🎉 Ready for Research!</h4>
+                    <p>Your Zotero Connector is now optimized for enzymatic allergen research. You can quickly save papers on subtilisin, papain, sprayable formulations, and allergen validation methods with one click.</p>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="zotero_setup.html" class="btn btn-secondary">← Back to Zotero Setup</a>
+                <a href="index.html" class="btn btn-secondary">Return to Dashboard</a>
+                <a href="zotero_aria_plugin_setup.html" class="btn btn-primary">Next: Zotero ARIA Plugin →</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Epitope Erase Project | Zotero Connector Setup Guide | Personalized for RogmanDB's Enzymatic Allergen Research</p>
+        <p>© 2025 University Research System | UWP Color Scheme Compliant</p>
+    </div>
+
+    <script>
+        // Show installation steps for selected browser
+        function showInstallSteps(browser) {
+            // Hide all browser steps
+            document.querySelectorAll('.browser-install-steps').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Show selected browser steps
+            document.getElementById(browser + '-steps').style.display = 'block';
+            
+            // Update progress indicator
+            const steps = document.querySelectorAll('.progress-step');
+            steps.forEach((step, index) => {
+                if (index <= 1) { // First two steps active
+                    step.classList.add('active');
+                }
+            });
+        }
+        
+        // Simulate save button click
+        function simulateSave() {
+            const feedback = document.getElementById('save-feedback');
+            feedback.textContent = "✓ Paper saved to 'Epitope Erase Research' collection with tags: enzymatic_cleaning, protease";
+            
+            // Reset after 3 seconds
+            setTimeout(() => {
+                feedback.textContent = "";
+            }, 3000);
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show Chrome steps by default
+            showInstallSteps('chrome');
+            
+            // Add checkboxes to steps for user tracking
+            const steps = document.querySelectorAll('.step-card');
+            steps.forEach((step, index) => {
+                const header = step.querySelector('.step-header');
+                if (header && index < steps.length - 1) { // Skip the last "Next Steps" card
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `step-${index + 1}`;
+                    checkbox.style.marginLeft = 'auto';
+                    checkbox.style.width = '24px';
+                    checkbox.style.height = '24px';
+                    checkbox.style.cursor = 'pointer';
+                    checkbox.style.accentColor = 'var(--uwp-accent)';
+                    
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            const stepNumber = this.id.split('-')[1];
+                            const progressStep = document.querySelector(`.progress-step:nth-child(${stepNumber})`);
+                            if (progressStep) {
+                                progressStep.classList.add('active');
+                                
+                                // Auto-check next step
+                                const nextStep = document.querySelector(`.progress-step:nth-child(${parseInt(stepNumber) + 1})`);
+                                if (nextStep && !nextStep.classList.contains('active')) {
+                                    setTimeout(() => {
+                                        nextStep.classList.add('active');
+                                    }, 300);
+                                }
+                            }
+                        }
+                    });
+                    
+                    header.appendChild(checkbox);
+                }
+            });
+            
+            // Add click functionality to progress steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNumber = this.querySelector('.step-circle').textContent;
+                    const targetCard = document.querySelector(`.step-card:nth-child(${parseInt(stepNumber)})`);
+                    
+                    if (targetCard) {
+                        targetCard.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add copy functionality to URL boxes
+            document.querySelectorAll('.url-box').forEach(box => {
+                box.style.cursor = 'pointer';
+                box.title = 'Click to copy URL';
+                
+                box.addEventListener('click', function() {
+                    const text = this.textContent.trim();
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = "✓ URL copied to clipboard!";
+                        this.style.backgroundColor = '#d1fae5';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.backgroundColor = '';
+                        }, 1500);
+                    });
+                });
+            });
+            
+            // Make browser cards more interactive
+            document.querySelectorAll('.browser-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
