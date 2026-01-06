@@ -1,1 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchRabbit Setup - Epitope Erase Project</title>
+    <style>
+        :root {
+            --uwp-primary: #4B286D;
+            --uwp-secondary: #0069B4;
+            --uwp-accent: #43B02A;
+            --uwp-neutral: #F2F2F2;
+            --uwp-light: #FFFFFF;
+            --uwp-dark: #1A1A1A;
+            --uwp-text: #333333;
+            --uwp-card-bg: #FFFFFF;
+            --uwp-border: #D9D9D9;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            line-height: 1.6;
+            padding: 0;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--uwp-primary) 0%, var(--uwp-secondary) 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-icon {
+            background-color: white;
+            color: var(--uwp-primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .logo-text h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-text p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .research-context {
+            background-color: rgba(67, 176, 42, 0.1);
+            border-left: 4px solid var(--uwp-accent);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .research-context h3 {
+            color: var(--uwp-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Setup Steps */
+        .step-card {
+            background-color: var(--uwp-card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid var(--uwp-secondary);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-number {
+            background-color: var(--uwp-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            color: var(--uwp-secondary);
+        }
+        
+        .step-content {
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content h4 {
+            color: var(--uwp-primary);
+            margin: 1.5rem 0 0.8rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .step-content ul, .step-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content li {
+            margin-bottom: 0.8rem;
+        }
+        
+        /* Screenshot Placeholders */
+        .screenshot {
+            background-color: #f8f9fa;
+            border: 1px solid var(--uwp-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        
+        .screenshot img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        /* Code/Input Styling */
+        code {
+            background-color: #f1f3f5;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d63384;
+        }
+        
+        .url-box {
+            background-color: #f8f9ff;
+            border: 1px solid #d0d7ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* Search Term Cards */
+        .search-terms {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .term-card {
+            background-color: #f0f7ff;
+            border: 1px solid #cce0ff;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+        
+        .term-card h5 {
+            color: var(--uwp-secondary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+        
+        /* Alert Boxes */
+        .tip-box {
+            background-color: #e8f4ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--uwp-secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #005593;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            border: 1px solid var(--uwp-border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--uwp-border);
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--uwp-border);
+            z-index: 1;
+        }
+        
+        .progress-step.active::after {
+            background-color: var(--uwp-accent);
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            z-index: 2;
+            border: 2px solid var(--uwp-border);
+        }
+        
+        .progress-step.active .step-circle {
+            background-color: var(--uwp-accent);
+            color: white;
+            border-color: var(--uwp-accent);
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-step.active .step-label {
+            color: var(--uwp-primary);
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .step-card {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .progress-indicator {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-link">← Back to Epitope Erase Dashboard</a>
+            <div class="logo-container">
+                <div class="logo-icon">🐇</div>
+                <div class="logo-text">
+                    <h1>ResearchRabbit Setup Guide</h1>
+                    <p>Tailored for RogmanDB's Enzymatic Allergen Research</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="research-context">
+            <h3>🔬 Research Context: Epitope Erase Project</h3>
+            <p>This setup is specifically configured for your research on <strong>enzymatic allergen denaturation using proteases</strong>. ResearchRabbit will help you discover and track papers on subtilisin, papain, sprayable enzyme formulations, and allergen detection methods.</p>
+        </div>
+        
+        <div class="progress-indicator">
+            <div class="progress-step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">Account Setup</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">2</div>
+                <div class="step-label">Collections</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Search Setup</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">4</div>
+                <div class="step-label">Integration</div>
+            </div>
+        </div>
+        
+        <!-- Step 1: Account Creation -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2 class="step-title">Create Your ResearchRabbit Account</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>ResearchRabbit is a visual literature discovery tool that helps you find related papers and track research trends. It's particularly useful for mapping the enzymatic allergen denaturation field.</p>
+                
+                <h4>Step-by-Step Account Creation:</h4>
+                <ol>
+                    <li><strong>Visit ResearchRabbit:</strong> Go to <span class="url-box">https://www.researchrabbit.ai</span></li>
+                    <li><strong>Sign Up:</strong> Click "Sign Up" in the top right corner</li>
+                    <li><strong>Choose Registration Method:</strong>
+                        <ul>
+                            <li><strong>Recommended:</strong> Use your institutional email if available (ends with .edu or similar)</li>
+                            <li>Alternatively, use Google account or personal email</li>
+                        </ul>
+                    </li>
+                    <li><strong>Complete Profile:</strong>
+                        <ul>
+                            <li>Full Name: <code>RogmanDB</code> (or your preferred name)</li>
+                            <li>Research Interests: Include "enzymatic cleaning," "allergen denaturation," "food safety"</li>
+                            <li>Institution: University of Wisconsin-Parkside (or your institution)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Verify Email:</strong> Check your email for verification link</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>🎯 Pro Tip for Enzymatic Research</h4>
+                    <p>When setting up your profile, mention your specific interest in "protease-based allergen removal" and "sprayable enzyme formulations." This helps ResearchRabbit's recommendation algorithms prioritize relevant papers.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Collection Setup -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2 class="step-title">Create Research Collections</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Collections help organize papers by topic. For your Epitope Erase project, create these specific collections:</p>
+                
+                <div class="screenshot">
+                    <p>[Image: ResearchRabbit Collections Interface]</p>
+                    <p>Visual representation of collections interface showing "New Collection" button</p>
+                </div>
+                
+                <h4>Essential Collections for Your Research:</h4>
+                
+                <div class="search-terms">
+                    <div class="term-card">
+                        <h5>📚 Primary Collection</h5>
+                        <p><strong>Name:</strong> Epitope Erase - Enzymatic Denaturation</p>
+                        <p><strong>Description:</strong> Core papers on protease-based allergen removal</p>
+                    </div>
+                    
+                    <div class="term-card">
+                        <h5>🔬 Method-Specific Collections</h5>
+                        <p><strong>1. Subtilisin Applications</strong><br>Papers on subtilisin for surface cleaning</p>
+                        <p><strong>2. Papain & Trypsin Studies</strong><br>Alternative protease research</p>
+                    </div>
+                    
+                    <div class="term-card">
+                        <h5>🧪 Validation & Detection</h5>
+                        <p><strong>1. ELISA Validation Methods</strong><br>Allergen detection post-cleaning</p>
+                        <p><strong>2. Surface Swabbing Techniques</strong><br>Sampling methodology papers</p>
+                    </div>
+                    
+                    <div class="term-card">
+                        <h5>🏭 Industrial Applications</h5>
+                        <p><strong>1. Sprayable Formulations</strong><br>Foam and spray delivery systems</p>
+                        <p><strong>2. Food Factory Case Studies</strong><br>Real-world implementations</p>
+                    </div>
+                </div>
+                
+                <h4>How to Create Collections:</h4>
+                <ol>
+                    <li>Click <code>+ New Collection</code> button</li>
+                    <li>Name your collection (use names above)</li>
+                    <li>Add description: "For [specific aspect] of enzymatic allergen research"</li>
+                    <li>Set privacy: <strong>Private</strong> (recommended for ongoing research)</li>
+                    <li>Click <code>Create Collection</code></li>
+                </ol>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Important Organization Tip</h4>
+                    <p>Create all collections <strong>before</strong> starting your searches. This allows you to immediately save relevant papers to the appropriate collection as you find them.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Search Configuration -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2 class="step-title">Configure Search Alerts & Keywords</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Set up targeted searches and alerts to automatically receive new papers in your field.</p>
+                
+                <h4>Recommended Search Keywords for Enzymatic Research:</h4>
+                
+                <div class="search-terms">
+                    <div class="term-card">
+                        <h5>🧬 Enzyme-Specific Terms</h5>
+                        <ul>
+                            <li>"subtilisin AND allergen"</li>
+                            <li>"papain surface cleaning"</li>
+                            <li>"protease AND peanut allergen"</li>
+                            <li>"enzymatic denaturation food"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="term-card">
+                        <h5>🏭 Application Terms</h5>
+                        <ul>
+                            <li>"sprayable enzyme foam"</li>
+                            <li>"industrial enzyme cleaning"</li>
+                            <li>"food contact surface sanitation"</li>
+                            <li>"allergen removal validation"</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="term-card">
+                        <h5>🌍 Regional & Regulatory</h5>
+                        <ul>
+                            <li>"GB 7718 allergen control"</li>
+                            <li>"VITAL 3.0 enzymatic"</li>
+                            <li>"FDA allergen guidance enzyme"</li>
+                            <li>"EU food safety protease"</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h4>Setting Up Search Alerts:</h4>
+                <ol>
+                    <li>Go to <code>Discover</code> tab in ResearchRabbit</li>
+                    <li>Enter your search terms (use combinations above)</li>
+                    <li>Apply filters:
+                        <ul>
+                            <li><strong>Publication Date:</strong> 2020-2025</li>
+                            <li><strong>Document Type:</strong> Article, Review</li>
+                            <li><strong>Language:</strong> English</li>
+                        </ul>
+                    </li>
+                    <li>Click <code>Save Search</code> button</li>
+                    <li>Choose alert frequency: <strong>Weekly</strong> (recommended)</li>
+                    <li>Select which collections to add new papers to automatically</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>🔍 Advanced Search Strategy</h4>
+                    <p>Create separate searches for:
+                    <br>1. <strong>Broad landscape:</strong> "enzymatic allergen removal"
+                    <br>2. <strong>Specific enzymes:</strong> "subtilisin OR papain AND food surface"
+                    <br>3. <strong>Validation methods:</strong> "ELISA validation enzymatic cleaning"
+                    <br>This ensures comprehensive coverage of your research field.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4: Zotero Integration -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2 class="step-title">Connect to Zotero & Verify Setup</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Integrating ResearchRabbit with Zotero creates a seamless workflow for managing your enzymatic research papers.</p>
+                
+                <div class="screenshot">
+                    <p>[Image: ResearchRabbit Export Options showing Zotero integration]</p>
+                    <p>Visual showing export button with Zotero option highlighted</p>
+                </div>
+                
+                <h4>Basic Connection Setup:</h4>
+                <ol>
+                    <li>In ResearchRabbit, go to <code>Settings</code> → <code>Integrations</code></li>
+                    <li>Find <code>Zotero Integration</code> section</li>
+                    <li>Click <code>Connect to Zotero</code></li>
+                    <li>Authorize the connection in the pop-up window</li>
+                    <li>Select your Zotero library: <strong>Epitope Erase Research</strong></li>
+                    <li>Choose sync preferences:
+                        <ul>
+                            <li><strong>Sync automatically:</strong> Yes</li>
+                            <li><strong>Include PDFs:</strong> Yes (if available)</li>
+                            <li><strong>Add tags:</strong> Yes (creates tags from ResearchRabbit keywords)</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h4>Verification Test:</h4>
+                <p>Perform this test to ensure everything is working:</p>
+                <ol>
+                    <li>In ResearchRabbit, find one paper on "enzymatic surface cleaning"</li>
+                    <li>Add it to your <strong>Epitope Erase - Enzymatic Denaturation</strong> collection</li>
+                    <li>Wait 2-3 minutes for sync</li>
+                    <li>Open Zotero and check your <strong>Epitope Erase Research</strong> collection</li>
+                    <li>Verify the paper appears with all metadata intact</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>🔄 Syncing Best Practices</h4>
+                    <p>1. <strong>Regular Sync Check:</strong> Verify weekly that papers added to ResearchRabbit appear in Zotero
+                    <br>2. <strong>Tag Consistency:</strong> ResearchRabbit tags become Zotero tags - use consistent terminology
+                    <br>3. <strong>Backup Strategy:</strong> Export your ResearchRabbit collections monthly as JSON backup</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="step-card">
+            <div class="step-header">
+                <h2 class="step-title">✅ Setup Complete - Next Steps</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Your ResearchRabbit is now configured for enzymatic allergen denaturation research. Here are your immediate next steps:</p>
+                
+                <h4>Immediate Actions (First Research Session):</h4>
+                <ol>
+                    <li><strong>Seed your collections:</strong> Add 5-10 foundational papers using the search terms provided</li>
+                    <li><strong>Explore "Similar Work":</strong> For each paper, click "Similar Work" to discover related research</li>
+                    <li><strong>Set author alerts:</strong> Identify key researchers in enzymatic cleaning and follow their work</li>
+                    <li><strong>Create visualization:</strong> Use ResearchRabbit's visualization tools to map the research landscape</li>
+                </ol>
+                
+                <h4>Troubleshooting Common Issues:</h4>
+                <ul>
+                    <li><strong>No papers found?</strong> Broaden your search terms or check date filters</li>
+                    <li><strong>Zotero sync not working?</strong> Re-authenticate the connection in ResearchRabbit settings</li>
+                    <li><strong>Missing PDFs?</strong> ResearchRabbit only exports PDFs when available through your institutional access</li>
+                    <li><strong>Slow performance?</strong> Clear browser cache or try ResearchRabbit desktop app</li>
+                </ul>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="index.html" class="btn btn-primary">← Return to Epitope Erase Dashboard</a>
+                <a href="zotero_setup.html" class="btn btn-secondary">Next: Zotero Setup →</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Epitope Erase Project | ResearchRabbit Setup Guide | Personalized for RogmanDB's Enzymatic Allergen Research</p>
+        <p>© 2025 University Research System | UWP Color Scheme Compliant</p>
+    </div>
 
+    <script>
+        // Simple progress indicator update
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add checkboxes to steps for user tracking
+            const steps = document.querySelectorAll('.step-card');
+            steps.forEach((step, index) => {
+                const header = step.querySelector('.step-header');
+                if (header && index < steps.length - 1) { // Skip the last "Next Steps" card
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `step-${index + 1}`;
+                    checkbox.style.marginLeft = 'auto';
+                    checkbox.style.width = '24px';
+                    checkbox.style.height = '24px';
+                    checkbox.style.cursor = 'pointer';
+                    checkbox.style.accentColor = 'var(--uwp-accent)';
+                    
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            const stepNumber = this.id.split('-')[1];
+                            const progressStep = document.querySelector(`.progress-step:nth-child(${stepNumber})`);
+                            if (progressStep) {
+                                progressStep.classList.add('active');
+                            }
+                        }
+                    });
+                    
+                    header.appendChild(checkbox);
+                }
+            });
+            
+            // Add click functionality to progress steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNumber = this.querySelector('.step-circle').textContent;
+                    const targetCard = document.querySelector(`.step-card:nth-child(${parseInt(stepNumber) + 1})`);
+                    
+                    if (targetCard) {
+                        targetCard.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
