@@ -1,1 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Account Setup - Epitope Erase Project</title>
+    <style>
+        :root {
+            --uwp-primary: #4B286D;
+            --uwp-secondary: #0069B4;
+            --uwp-accent: #43B02A;
+            --uwp-neutral: #F2F2F2;
+            --uwp-light: #FFFFFF;
+            --uwp-dark: #1A1A1A;
+            --uwp-text: #333333;
+            --uwp-card-bg: #FFFFFF;
+            --uwp-border: #D9D9D9;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            line-height: 1.6;
+            padding: 0;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--uwp-primary) 0%, var(--uwp-secondary) 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-icon {
+            background-color: white;
+            color: var(--uwp-primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .logo-text h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-text p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .research-context {
+            background-color: rgba(67, 176, 42, 0.1);
+            border-left: 4px solid var(--uwp-accent);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .research-context h3 {
+            color: var(--uwp-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Setup Steps */
+        .step-card {
+            background-color: var(--uwp-card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid var(--uwp-secondary);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-number {
+            background-color: var(--uwp-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            color: var(--uwp-secondary);
+        }
+        
+        .step-content {
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content h4 {
+            color: var(--uwp-primary);
+            margin: 1.5rem 0 0.8rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .step-content ul, .step-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content li {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* AI Platform Cards */
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .platform-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--uwp-secondary);
+        }
+        
+        .platform-card.selected {
+            border: 2px solid var(--uwp-accent);
+            background-color: #f0fff4;
+        }
+        
+        .platform-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--uwp-accent);
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .platform-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--uwp-secondary);
+        }
+        
+        .platform-name {
+            font-weight: 700;
+            color: var(--uwp-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .platform-features {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .platform-cost {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--uwp-secondary);
+            font-weight: 600;
+        }
+        
+        /* Registration Steps */
+        .registration-steps {
+            background-color: #f8f9ff;
+            border: 1px solid #e0e7ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            display: none;
+        }
+        
+        .step {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 0.8rem 0;
+            counter-increment: step;
+            position: relative;
+            padding-left: 3rem;
+        }
+        
+        .step::before {
+            content: counter(step);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--uwp-secondary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        /* Prompt Library */
+        .prompt-library {
+            background-color: #fef7ff;
+            border: 1px solid #e9d5ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .prompt-category {
+            margin-bottom: 1.5rem;
+        }
+        
+        .prompt-item {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .prompt-item:hover {
+            background-color: #f8f9ff;
+            border-color: var(--uwp-secondary);
+        }
+        
+        .prompt-title {
+            font-weight: 600;
+            color: var(--uwp-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .prompt-text {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #555;
+            background-color: #f9fafb;
+            padding: 0.8rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            white-space: pre-wrap;
+            display: none;
+        }
+        
+        /* API Configuration */
+        .api-config {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .api-field {
+            margin-bottom: 1rem;
+        }
+        
+        .api-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--uwp-primary);
+        }
+        
+        .api-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--uwp-border);
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* Code/Technical Blocks */
+        code {
+            background-color: #f1f3f5;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d63384;
+        }
+        
+        .technical-box {
+            background-color: #f8f9ff;
+            border: 1px solid #d0d7ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* Workflow Demo */
+        .workflow-demo {
+            background-color: #f8f9fa;
+            border: 2px solid var(--uwp-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .demo-step {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .demo-number {
+            background-color: var(--uwp-accent);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        /* Alert Boxes */
+        .tip-box {
+            background-color: #e8f4ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        .success-box {
+            background-color: #d1fae5;
+            border-left: 4px solid var(--uwp-accent);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--uwp-secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #005593;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            border: 1px solid var(--uwp-border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--uwp-border);
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--uwp-border);
+            z-index: 1;
+        }
+        
+        .progress-step.active::after {
+            background-color: var(--uwp-accent);
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            z-index: 2;
+            border: 2px solid var(--uwp-border);
+        }
+        
+        .progress-step.active .step-circle {
+            background-color: var(--uwp-accent);
+            color: white;
+            border-color: var(--uwp-accent);
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-step.active .step-label {
+            color: var(--uwp-primary);
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .step-card {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .progress-indicator {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-step {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-link">← Back to Epitope Erase Dashboard</a>
+            <div class="logo-container">
+                <div class="logo-icon">🧠</div>
+                <div class="logo-text">
+                    <h1>AI Account Setup Guide</h1>
+                    <p>Configure AI Assistants for Enzymatic Allergen Research</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="research-context">
+            <h3>🔬 Research Context: Epitope Erase Project</h3>
+            <p>Configure AI assistants specifically for your enzymatic allergen research. This guide helps you set up accounts, optimize prompts, and create workflows for analyzing protease studies, sprayable formulations, and allergen validation methods.</p>
+        </div>
+        
+        <div class="progress-indicator">
+            <div class="progress-step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">Choose AI Platform</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">2</div>
+                <div class="step-label">Account Setup</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Prompt Optimization</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">4</div>
+                <div class="step-label">Workflow Integration</div>
+            </div>
+        </div>
+        
+        <!-- Step 1: Platform Selection -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2 class="step-title">Choose Your AI Research Assistant</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Select the AI platform that best fits your enzymatic research needs, budget, and technical requirements.</p>
+                
+                <div class="tip-box">
+                    <h4>🎯 Recommendation for Enzymatic Research</h4>
+                    <p>For comprehensive literature analysis, we recommend having <strong>at least two AI assistants</strong>:
+                    <br>1. <strong>Primary:</strong> ChatGPT Plus (for complex analysis and reasoning)
+                    <br>2. <strong>Secondary:</strong> Claude or Copilot (for different perspectives and backup)</p>
+                </div>
+                
+                <h4>AI Platforms for Research:</h4>
+                
+                <div class="platform-grid">
+                    <div class="platform-card" onclick="selectPlatform('chatgpt')">
+                        <div class="platform-badge">Recommended</div>
+                        <div class="platform-icon">⚡</div>
+                        <div class="platform-name">ChatGPT Plus</div>
+                        <div class="platform-features">
+                            • Best for complex reasoning<br>
+                            • File upload (PDF, DOCX)<br>
+                            • Web browsing (with plugins)<br>
+                            • Code interpreter<br>
+                            • Custom GPTs available
+                        </div>
+                        <div class="platform-cost">💰 $20/month • Free tier available</div>
+                    </div>
+                    
+                    <div class="platform-card" onclick="selectPlatform('claude')">
+                        <div class="platform-icon">🤖</div>
+                        <div class="platform-name">Claude (Anthropic)</div>
+                        <div class="platform-features">
+                            • Excellent for long documents<br>
+                            • Strong reasoning capabilities<br>
+                            • File upload support<br>
+                            • Good for literature review<br>
+                            • 100K context window
+                        </div>
+                        <div class="platform-cost">💰 Free tier + $20/month Pro</div>
+                    </div>
+                    
+                    <div class="platform-card" onclick="selectPlatform('copilot')">
+                        <div class="platform-icon">🚀</div>
+                        <div class="platform-name">Microsoft Copilot</div>
+                        <div class="platform-features">
+                            • Free with Microsoft account<br>
+                            • Good for basic research<br>
+                            • Web search integration<br>
+                            • Works with Office 365<br>
+                            • Good for students
+                        </div>
+                        <div class="platform-cost">💰 Free • $20/month for Copilot Pro</div>
+                    </div>
+                    
+                    <div class="platform-card" onclick="selectPlatform('deepseek')">
+                        <div class="platform-icon">🔍</div>
+                        <div class="platform-name">DeepSeek</div>
+                        <div class="platform-features">
+                            • Free and open-source<br>
+                            • Good for coding tasks<br>
+                            • File upload support<br>
+                            • Web search capability<br>
+                            • 128K context window
+                        </div>
+                        <div class="platform-cost">💰 Completely free</div>
+                    </div>
+                    
+                    <div class="platform-card" onclick="selectPlatform('gemini')">
+                        <div class="platform-icon">🌟</div>
+                        <div class="platform-name">Google Gemini</div>
+                        <div class="platform-features">
+                            • Free with Google account<br>
+                            • Good web integration<br>
+                            • Works with Google Workspace<br>
+                            • Image analysis capabilities<br>
+                            • Real-time data access
+                        </div>
+                        <div class="platform-cost">💰 Free • $20/month for Advanced</div>
+                    </div>
+                    
+                    <div class="platform-card" onclick="selectPlatform('perplexity')">
+                        <div class="platform-icon">🔎</div>
+                        <div class="platform-name">Perplexity AI</div>
+                        <div class="platform-features">
+                            • Excellent for research<br>
+                            • Citation generation<br>
+                            • Real-time web search<br>
+                            • Focus on accuracy<br>
+                            • Academic paper search
+                        </div>
+                        <div class="platform-cost">💰 Free • $20/month for Pro</div>
+                    </div>
+                </div>
+                
+                <div id="chatgpt-registration" class="registration-steps">
+                    <h4>ChatGPT Plus Registration:</h4>
+                    <div class="step">Go to <a href="https://chat.openai.com" target="_blank">chat.openai.com</a></div>
+                    <div class="step">Click "Sign up" and create account (use institutional email if possible)</div>
+                    <div class="step">Verify email address</div>
+                    <div class="step">Log in and click "Upgrade to Plus" in bottom left</div>
+                    <div class="step">Enter payment information ($20/month)</div>
+                    <div class="step">Enable beta features: Web browsing, Plugins, Advanced Data Analysis</div>
+                    <div class="step">Configure custom instructions for enzymatic research (see below)</div>
+                </div>
+                
+                <div id="claude-registration" class="registration-steps">
+                    <h4>Claude Registration:</h4>
+                    <div class="step">Go to <a href="https://claude.ai" target="_blank">claude.ai</a></div>
+                    <div class="step">Click "Try Claude" and sign up with email</div>
+                    <div class="step">Verify email address</div>
+                    <div class="step">Start with free tier, upgrade to Pro ($20/month) for larger context</div>
+                    <div class="step">Configure Claude for research in settings</div>
+                </div>
+                
+                <div id="copilot-registration" class="registration-steps">
+                    <h4>Copilot Registration:</h4>
+                    <div class="step">Go to <a href="https://copilot.microsoft.com" target="_blank">copilot.microsoft.com</a></div>
+                    <div class="step">Sign in with Microsoft account (institutional account recommended)</div>
+                    <div class="step">Access for free, or upgrade to Copilot Pro ($20/month) for priority access</div>
+                    <div class="step">Enable "Precise" mode for research tasks</div>
+                    <div class="step">Use Microsoft Edge for best integration</div>
+                </div>
+                
+                <div id="deepseek-registration" class="registration-steps">
+                    <h4>DeepSeek Registration:</h4>
+                    <div class="step">Go to <a href="https://chat.deepseek.com" target="_blank">chat.deepseek.com</a></div>
+                    <div class="step">Click "Try Now" and create account</div>
+                    <div class="step">Verify email address</div>
+                    <div class="step">Completely free - no payment required</div>
+                    <div class="step">Enable web search in settings</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Account Configuration -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2 class="step-title">Configure Accounts for Enzymatic Research</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Optimize your AI accounts specifically for analyzing enzymatic allergen research papers.</p>
+                
+                <h4>Custom Instructions for Enzymatic Research:</h4>
+                <p>Add these custom instructions to your AI account settings:</p>
+                
+                <div class="technical-box">
+                    ## Research Context
+                    I am a researcher working on enzymatic allergen denaturation, specifically:
+                    - Protease-based cleaning (subtilisin, papain, trypsin)
+                    - Sprayable enzyme formulations for food contact surfaces
+                    - Peanut allergen removal validation methods (ELISA, swabbing)
+                    - Industrial application feasibility studies
+                    
+                    ## Your Role
+                    You are a specialized research assistant with expertise in:
+                    - Food science and enzyme chemistry
+                    - Allergen detection and validation methods
+                    - Academic paper analysis and synthesis
+                    - Experimental design for enzymatic studies
+                    
+                    ## Response Guidelines
+                    1. Always cite specific studies when discussing enzymatic methods
+                    2. Focus on practical applications and industrial feasibility
+                    3. Compare different protease effectiveness where relevant
+                    4. Consider cost implications for SMEs (small-medium enterprises)
+                    5. Reference regulatory standards (FDA, EU, GB 7718, VITAL 3.0)
+                    6. Use structured formats (tables, bullet points) for complex information
+                    
+                    ## File Handling
+                    When I upload research papers:
+                    1. Extract key experimental parameters (enzyme concentration, contact time, pH, temperature)
+                    2. Identify validation methods used
+                    3. Note limitations and research gaps mentioned
+                    4. Suggest follow-up experiments
+                </div>
+                
+                <h4>Platform-Specific Configuration:</h4>
+                
+                <div class="api-config">
+                    <h5>ChatGPT Configuration:</h5>
+                    <ol>
+                        <li>Go to Settings → Beta Features → Enable all features</li>
+                        <li>Go to Settings → Custom Instructions → Paste the instructions above</li>
+                        <li>Install research plugins:
+                            <ul>
+                                <li><strong>ScholarAI:</strong> For paper search and analysis</li>
+                                <li><strong>Link Reader:</strong> For reading PDFs and websites</li>
+                                <li><strong>Video Insights:</strong> For analyzing research videos</li>
+                            </ul>
+                        </li>
+                        <li>Create a Custom GPT for enzymatic research (optional)</li>
+                    </ol>
+                </div>
+                
+                <div class="api-config">
+                    <h5>Claude Configuration:</h5>
+                    <ol>
+                        <li>Go to Settings → Add the custom instructions above to your profile</li>
+                        <li>Enable file upload capabilities</li>
+                        <li>Use Claude Pro for larger context (100K tokens) for reviewing full papers</li>
+                    </ol>
+                </div>
+                
+                <div class="api-config">
+                    <h5>API Configuration for Zotero ARIA:</h5>
+                    <div class="api-field">
+                        <label class="api-label">OpenAI API Key (for Zotero ARIA):</label>
+                        <input type="text" class="api-input" id="openai-api-key" placeholder="sk-...">
+                        <div style="font-size: 0.8rem; color: #666; margin-top: 0.3rem;">
+                            Get from: <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a>
+                        </div>
+                    </div>
+                    
+                    <div class="api-field">
+                        <label class="api-label">Anthropic API Key (optional):</label>
+                        <input type="text" class="api-input" id="anthropic-api-key" placeholder="sk-ant-...">
+                        <div style="font-size: 0.8rem; color: #666; margin-top: 0.3rem;">
+                            Get from: <a href="https://console.anthropic.com/settings/keys" target="_blank">console.anthropic.com</a>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" onclick="saveApiKeys()" style="margin-top: 1rem;">💾 Save API Keys (Local Storage)</button>
+                    <div id="api-save-feedback" style="margin-top: 0.5rem; font-weight: 600; color: var(--uwp-accent);"></div>
+                </div>
+                
+                <div class="warning-box">
+                    <h4>⚠️ Security Best Practices</h4>
+                    <p>1. <strong>Use institutional emails:</strong> For academic discounts and credibility
+                    <br>2. <strong>Separate accounts:</strong> Consider separate accounts for research vs personal use
+                    <br>3. <strong>API key management:</strong> Never share API keys, use environment variables
+                    <br>4. <strong>Data privacy:</strong> Be cautious with unpublished research data
+                    <br>5. <strong>Terms of service:</strong> Review AI platform terms for academic use</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Prompt Optimization -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2 class="step-title">Optimize Prompts for Enzymatic Research</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Use specialized prompts to get the most value from AI assistants for your enzymatic allergen research.</p>
+                
+                <div class="prompt-library">
+                    <h4>Enzymatic Research Prompt Library:</h4>
+                    
+                    <div class="prompt-category">
+                        <h5>📄 Paper Analysis Prompts</h5>
+                        
+                        <div class="prompt-item" onclick="togglePrompt(this)">
+                            <div class="prompt-title">
+                                <span>🔬</span> Comprehensive Enzymatic Paper Analysis
+                            </div>
+                            <div class="prompt-text">
+                                Analyze this enzymatic cleaning research paper focusing on:
+                                1. Enzyme type and source (subtilisin, papain, recombinant, etc.)
+                                2. Experimental parameters (concentration, contact time, pH, temperature)
+                                3. Surface materials tested (stainless steel, plastic, etc.)
+                                4. Allergen type and detection method (ELISA type, LOD, LOQ)
+                                5. Effectiveness metrics (% removal, residual allergen levels)
+                                6. Comparison to control methods (chemical cleaning, etc.)
+                                7. Cost considerations mentioned
+                                8. Limitations and future research directions
+                                
+                                Present findings in a structured table and suggest 2-3 follow-up experiments.
+                            </div>
+                        </div>
+                        
+                        <div class="prompt-item" onclick="togglePrompt(this)">
+                            <div class="prompt-title">
+                                <span>📊</span> Data Extraction from Tables/Figures
+                            </div>
+                            <div class="prompt-text">
+                                Extract all quantitative data from tables and figures in this paper related to:
+                                - Enzyme concentration vs. effectiveness
+                                - Contact time vs. allergen removal
+                                - pH/temperature optimization data
+                                - Control vs. experimental comparisons
+                                - Statistical significance values
+                                
+                                Organize extracted data into a CSV-like format. Identify trends and optimal conditions.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="prompt-category">
+                        <h5>🔍 Literature Review Prompts</h5>
+                        
+                        <div class="prompt-item" onclick="togglePrompt(this)">
+                            <div class="prompt-title">
+                                <span>🌐</span> Comparative Analysis of Multiple Papers
+                            </div>
+                            <div class="prompt-text">
+                                Compare these 5 papers on enzymatic allergen removal:
+                                1. Create a comparison table with columns: Author/Year, Enzyme Used, Concentration, Contact Time, Surface, Effectiveness, Validation Method, Cost Mentioned
+                                2. Identify trends across studies (e.g., optimal conditions, most effective enzymes)
+                                3. Note contradictions or inconsistent findings
+                                4. Identify research gaps in the collective literature
+                                5. Suggest a synthesis experiment that builds on these studies
+                                
+                                Focus specifically on practical applications for food factory settings.
+                            </div>
+                        </div>
+                        
+                        <div class="prompt-item" onclick="togglePrompt(this)">
+                            <div class="prompt-title">
+                                <span>📈</span> Trend Analysis in Enzymatic Research
+                            </div>
+                            <div class="prompt-text">
+                                Analyze the evolution of enzymatic cleaning research from 2015-2025:
+                                1. Identify shifts in focus (e.g., from laboratory to industrial applications)
+                                2. Note changes in preferred enzymes over time
+                                3. Track improvements in detection methods (ELISA sensitivity)
+                                4. Identify emerging technologies (sprayable formulations, immobilized enzymes)
+                                5. Predict next 5-year trends based on current trajectory
+                                
+                                Provide specific citations for each trend identified.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="prompt-category">
+                        <h5>💡 Research Design Prompts</h5>
+                        
+                        <div class="prompt-item" onclick="togglePrompt(this)">
+                            <div class="prompt-title">
+                                <span>🧪</span> Experiment Design for Sprayable Enzymes
+                            </div>
+                            <div class="prompt-text">
+                                Design an experiment to test a sprayable subtilisin formulation for peanut allergen removal:
+                                1. Hypothesis: Based on existing literature
+                                2. Materials: Specific enzymes, surfaces, allergens, detection methods
+                                3. Methods: Detailed protocol including concentrations, contact times, controls
+                                4. Expected outcomes: Predicted effectiveness ranges
+                                5. Potential pitfalls: Common issues in enzymatic cleaning experiments
+                                6. Validation methods: ELISA protocols, swabbing techniques
+                                7. Statistical analysis plan
+                                
+                                Include cost estimates for materials and equipment.
+                            </div>
+                        </div>
+                        
+                        <div class="prompt-item" onclick="togglePrompt(this)">
+                            <div class="prompt-title">
+                                <span>🎯</span> Gap Analysis and Research Questions
+                            </div>
+                            <div class="prompt-text">
+                                Based on this literature, identify specific research gaps in enzymatic allergen removal:
+                                1. Unexplored enzyme combinations or formulations
+                                2. Missing surface materials (specific plastics, textured surfaces)
+                                3. Lack of long-term stability data
+                                4. Absence of cost-benefit analyses for SMEs
+                                5. Regulatory pathway uncertainties
+                                6. Unaddressed scale-up challenges
+                                
+                                For each gap, formulate a specific research question and suggest a feasible experiment.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="prompt-category">
+                        <h5>📝 Writing and Proposal Prompts</h5>
+                        
+                        <div class="prompt-item" onclick="togglePrompt(this)">
+                            <div class="prompt-title">
+                                <span>✍️</span> Research Proposal Drafting
+                            </div>
+                            <div class="prompt-text">
+                                Help me draft a research proposal on "Development of a sprayable enzyme formulation for peanut allergen removal":
+                                1. Introduction: Context and literature review (cite 5-7 key papers)
+                                2. Research gap: Specific problem this addresses
+                                3. Objectives: 3-4 specific, measurable aims
+                                4. Methodology: Detailed experimental design
+                                5. Expected outcomes and significance
+                                6. Timeline and milestones
+                                7. Budget justification
+                                
+                                Emphasize practical applications for food industry and alignment with FDA/EU regulations.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>Prompt Engineering Tips for Enzymatic Research:</h4>
+                <ol>
+                    <li><strong>Be specific:</strong> Include enzyme names, concentrations, surfaces</li>
+                    <li><strong>Request structure:</strong> Ask for tables, bullet points, or specific formats</li>
+                    <li><strong>Provide context:</strong> Mention your research focus on sprayable formulations</li>
+                    <li><strong>Set constraints:</strong> "Limit to 500 words" or "Focus on industrial applications"</li>
+                    <li><strong>Ask for citations:</strong> "Cite specific studies when making claims"</li>
+                    <li><strong>Iterate:</strong> Refine prompts based on initial responses</li>
+                </ol>
+                
+                <div class="tip-box">
+                    <h4>🚀 Advanced Prompt Techniques</h4>
+                    <p>1. <strong>Chain of Thought:</strong> Ask AI to "think step by step" about enzymatic mechanisms
+                    <br>2. <strong>Few-shot Learning:</strong> Provide examples of good enzymatic study analyses
+                    <br>3. <strong>Role-playing:</strong> "Act as a food safety consultant reviewing this paper"
+                    <br>4. <strong>Template Prompts:</strong> Create reusable templates for different paper types
+                    <br>5. <strong>Multi-step Prompts:</strong> Break complex analysis into sequential steps</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 4: Workflow Integration -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2 class="step-title">Integrate AI into Your Research Workflow</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Create a seamless workflow combining AI assistants with your existing research tools.</p>
+                
+                <div class="workflow-demo">
+                    <h4>Complete Research Workflow with AI:</h4>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">1</div>
+                        <div>
+                            <strong>Discovery:</strong> Use ResearchRabbit to find papers on "subtilisin allergen removal"
+                        </div>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">2</div>
+                        <div>
+                            <strong>Collection:</strong> Save papers to Zotero using Zotero Connector (auto-tagged)
+                        </div>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">3</div>
+                        <div>
+                            <strong>Initial Screening:</strong> Use Zotero ARIA to generate quick summaries of all papers
+                        </div>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">4</div>
+                        <div>
+                            <strong>Deep Analysis:</strong> Upload key papers to ChatGPT/Claude for detailed enzymatic analysis
+                        </div>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">5</div>
+                        <div>
+                            <strong>Data Extraction:</strong> Use specialized prompts to extract experimental parameters
+                        </div>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">6</div>
+                        <div>
+                            <strong>Synthesis:</strong> Use Perplexity/Copilot to find additional context and recent studies
+                        </div>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">7</div>
+                        <div>
+                            <strong>Writing:</strong> Use AI to draft literature review sections based on analyzed papers
+                        </div>
+                    </div>
+                    
+                    <div class="demo-step">
+                        <div class="demo-number">8</div>
+                        <div>
+                            <strong>Citation:</strong> Use Zotero Word plugin to insert properly formatted citations
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>Tool-Specific Workflows:</h4>
+                
+                <div class="api-config">
+                    <h5>ChatGPT + Zotero Workflow:</h5>
+                    <ol>
+                        <li>Export Zotero references as BibTeX or RIS</li>
+                        <li>Upload to ChatGPT along with PDFs of key papers</li>
+                        <li>Use "Analyze these papers on enzymatic cleaning" prompt</li>
+                        <li>Ask ChatGPT to create an annotated bibliography</li>
+                        <li>Export analysis and save as notes in Zotero</li>
+                    </ol>
+                </div>
+                
+                <div class="api-config">
+                    <h5>Perplexity for Literature Gaps:</h5>
+                    <ol>
+                        <li>Use Perplexity's "Academic" mode</li>
+                        <li>Search: "research gaps enzymatic allergen removal 2024"</li>
+                        <li>Ask follow-up: "What are the limitations of current sprayable enzyme formulations?"</li>
+                        <li>Use cited papers to find additional references</li>
+                        <li>Save relevant papers to Zotero</li>
+                    </ol>
+                </div>
+                
+                <div class="api-config">
+                    <h5>Claude for Long Document Analysis:</h5>
+                    <ol>
+                        <li>Upload full PhD theses or lengthy review papers to Claude</li>
+                        <li>Ask: "Extract all information on protease stability in cleaning formulations"</li>
+                        <li>Request: "Create a timeline of enzymatic cleaning technology development"</li>
+                        <li>Use 100K context to analyze multiple papers together</li>
+                    </ol>
+                </div>
+                
+                <h4>Quality Control and Verification:</h4>
+                <div class="warning-box">
+                    <h4>🔍 Critical: Verify AI Outputs</h4>
+                    <p>AI can generate plausible but incorrect information. Always:
+                    <br>1. <strong>Check citations:</strong> Verify that cited papers actually exist
+                    <br>2. <strong>Cross-reference:</strong> Compare AI analysis with your own reading
+                    <br>3. <strong>Spot-check data:</strong> Verify extracted numbers against original papers
+                    <br>4. <strong>Be aware of limitations:</strong> AI may miss nuances or context
+                    <br>5. <strong>Use multiple AIs:</strong> Compare responses from ChatGPT, Claude, and Perplexity</p>
+                </div>
+                
+                <h4>Time and Cost Optimization:</h4>
+                <ul>
+                    <li><strong>Batch processing:</strong> Analyze multiple papers in one session</li>
+                    <li><strong>Free tier first:</strong> Use free versions for initial screening</li>
+                    <li><strong>Specialized tools:</strong> Use Perplexity for citations, Claude for long docs</li>
+                    <li><strong>Local models:</strong> Use Ollama with open-source models for sensitive data</li>
+                    <li><strong>Set budgets:</strong> Monitor API usage and set monthly limits</li>
+                </ul>
+                
+                <div class="success-box">
+                    <h4>✅ Sample Weekly Research Schedule with AI:</h4>
+                    <p><strong>Monday:</strong> ResearchRabbit discovery (30 min) → Save to Zotero (15 min)
+                    <br><strong>Tuesday:</strong> ARIA quick summaries of new papers (30 min)
+                    <br><strong>Wednesday:</strong> Deep analysis of 2-3 key papers with ChatGPT (60 min)
+                    <br><strong>Thursday:</strong> Gap analysis and experiment design with Claude (60 min)
+                    <br><strong>Friday:</strong> Literature review writing with AI assistance (90 min)
+                    <br><strong>Total AI-assisted time:</strong> 4-5 hours vs. 15-20 hours manual</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="step-card">
+            <div class="step-header">
+                <h2 class="step-title">✅ AI Research Assistant Setup Complete</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Your AI research assistants are now configured for enzymatic allergen research. Verify your setup:</p>
+                
+                <h4>Final Verification Checklist:</h4>
+                <ol>
+                    <li>✓ Primary AI platform account created (ChatGPT Plus recommended)</li>
+                    <li>✓ Secondary AI platform account created (Claude or Copilot)</li>
+                    <li>✓ Custom instructions for enzymatic research configured</li>
+                    <li>✓ API keys saved for Zotero ARIA integration</li>
+                    <li>✓ Prompt library bookmarked for enzymatic research</li>
+                    <li>✓ Workflow integrated with Zotero and ResearchRabbit</li>
+                    <li>✓ Quality control procedures established</li>
+                    <li>✓ Budget and time management plan created</li>
+                </ol>
+                
+                <h4>Immediate Next Steps:</h4>
+                <div class="platform-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="platform-card">
+                        <div class="platform-icon">🔍</div>
+                        <div class="platform-name">Test Your Setup</div>
+                        <div class="platform-features">Analyze one paper on subtilisin using your new workflow</div>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <div class="platform-icon">📚</div>
+                        <div class="platform-name">Build Library</div>
+                        <div class="platform-features">Collect 20-30 papers on enzymatic cleaning</div>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <div class="platform-icon">📝</div>
+                        <div class="platform-name">Create Templates</div>
+                        <div class="platform-features">Save your best prompts as templates</div>
+                    </div>
+                    
+                    <div class="platform-card">
+                        <div class="platform-icon">🔄</div>
+                        <div class="platform-name">Refine Workflow</div>
+                        <div class="platform-features">Adjust based on first week's experience</div>
+                    </div>
+                </div>
+                
+                <h4>Ongoing Optimization:</h4>
+                <ul>
+                    <li><strong>Weekly:</strong> Review and refine prompts based on results</li>
+                    <li><strong>Monthly:</strong> Check for new AI features or platforms</li>
+                    <li><strong>Quarterly:</strong> Re-evaluate subscription costs vs. usage</li>
+                    <li><strong>Per project:</strong> Create specialized prompts for each research phase</li>
+                </ul>
+                
+                <div class="success-box">
+                    <h4>🎉 Ready for AI-Powered Research Acceleration!</h4>
+                    <p>Your AI setup will save you dozens of hours in literature review and analysis. You can now quickly analyze papers on protease applications, identify research gaps, design experiments, and draft proposals with AI assistance tailored specifically for enzymatic allergen research.</p>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="zotero_aria_plugin_setup.html" class="btn btn-secondary">← Back to Zotero ARIA Setup</a>
+                <a href="index.html" class="btn btn-secondary">Return to Dashboard</a>
+                <a href="researchrabbit_zotero_link.html" class="btn btn-primary">Next: ResearchRabbit-Zotero Link →</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Epitope Erase Project | AI Account Setup Guide | Personalized for RogmanDB's Enzymatic Allergen Research</p>
+        <p>© 2025 University Research System | UWP Color Scheme Compliant</p>
+    </div>
 
+    <script>
+        // Platform selection functionality
+        let selectedPlatform = 'chatgpt';
+        
+        function selectPlatform(platform) {
+            selectedPlatform = platform;
+            
+            // Update visual selection
+            document.querySelectorAll('.platform-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            event.currentTarget.classList.add('selected');
+            
+            // Show registration steps for selected platform
+            document.querySelectorAll('.registration-steps').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            document.getElementById(platform + '-registration').style.display = 'block';
+            
+            // Update progress indicator
+            const steps = document.querySelectorAll('.progress-step');
+            steps.forEach((step, index) => {
+                if (index <= 1) { // First two steps active
+                    step.classList.add('active');
+                }
+            });
+        }
+        
+        // Toggle prompt display
+        function togglePrompt(element) {
+            const promptText = element.querySelector('.prompt-text');
+            if (promptText.style.display === 'block') {
+                promptText.style.display = 'none';
+            } else {
+                promptText.style.display = 'block';
+                
+                // Copy to clipboard on click
+                promptText.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const text = this.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = '✓ Copied to clipboard!';
+                        this.style.backgroundColor = '#d1fae5';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.backgroundColor = '';
+                        }, 1500);
+                    });
+                });
+            }
+        }
+        
+        // Save API keys to localStorage
+        function saveApiKeys() {
+            const openaiKey = document.getElementById('openai-api-key').value;
+            const anthropicKey = document.getElementById('anthropic-api-key').value;
+            
+            if (openaiKey) {
+                localStorage.setItem('epitope_erase_openai_key', openaiKey);
+            }
+            
+            if (anthropicKey) {
+                localStorage.setItem('epitope_erase_anthropic_key', anthropicKey);
+            }
+            
+            const feedback = document.getElementById('api-save-feedback');
+            const savedKeys = [];
+            if (openaiKey) savedKeys.push('OpenAI');
+            if (anthropicKey) savedKeys.push('Anthropic');
+            
+            if (savedKeys.length > 0) {
+                feedback.textContent = `✓ Saved ${savedKeys.join(' and ')} API keys to browser storage`;
+                feedback.style.color = 'var(--uwp-accent)';
+                
+                // Clear after 3 seconds
+                setTimeout(() => {
+                    feedback.textContent = '';
+                }, 3000);
+            } else {
+                feedback.textContent = '⚠️ No API keys entered';
+                feedback.style.color = '#ffc107';
+            }
+        }
+        
+        // Load saved API keys on page load
+        function loadSavedKeys() {
+            const openaiKey = localStorage.getItem('epitope_erase_openai_key');
+            const anthropicKey = localStorage.getItem('epitope_erase_anthropic_key');
+            
+            if (openaiKey) {
+                document.getElementById('openai-api-key').value = openaiKey;
+            }
+            
+            if (anthropicKey) {
+                document.getElementById('anthropic-api-key').value = anthropicKey;
+            }
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select ChatGPT by default
+            selectPlatform('chatgpt');
+            
+            // Load saved API keys
+            loadSavedKeys();
+            
+            // Add checkboxes to steps for user tracking
+            const steps = document.querySelectorAll('.step-card');
+            steps.forEach((step, index) => {
+                const header = step.querySelector('.step-header');
+                if (header && index < steps.length - 1) { // Skip the last "Next Steps" card
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `step-${index + 1}`;
+                    checkbox.style.marginLeft = 'auto';
+                    checkbox.style.width = '24px';
+                    checkbox.style.height = '24px';
+                    checkbox.style.cursor = 'pointer';
+                    checkbox.style.accentColor = 'var(--uwp-accent)';
+                    
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            const stepNumber = this.id.split('-')[1];
+                            const progressStep = document.querySelector(`.progress-step:nth-child(${stepNumber})`);
+                            if (progressStep) {
+                                progressStep.classList.add('active');
+                                
+                                // Auto-check next step
+                                const nextStep = document.querySelector(`.progress-step:nth-child(${parseInt(stepNumber) + 1})`);
+                                if (nextStep && !nextStep.classList.contains('active')) {
+                                    setTimeout(() => {
+                                        nextStep.classList.add('active');
+                                    }, 300);
+                                }
+                            }
+                        }
+                    });
+                    
+                    header.appendChild(checkbox);
+                }
+            });
+            
+            // Add click functionality to progress steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNumber = this.querySelector('.step-circle').textContent;
+                    const targetCard = document.querySelector(`.step-card:nth-child(${parseInt(stepNumber)})`);
+                    
+                    if (targetCard) {
+                        targetCard.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add copy functionality to technical boxes
+            document.querySelectorAll('.technical-box').forEach(box => {
+                box.style.cursor = 'pointer';
+                box.title = 'Click to copy';
+                
+                box.addEventListener('click', function() {
+                    const text = this.textContent.trim();
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = "✓ Custom instructions copied!";
+                        this.style.backgroundColor = '#d1fae5';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.backgroundColor = '';
+                        }, 1500);
+                    });
+                });
+            });
+            
+            // Make all links in registration steps open in new tab
+            document.querySelectorAll('.registration-steps a').forEach(link => {
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+            });
+        });
+    </script>
+</body>
+</html>
