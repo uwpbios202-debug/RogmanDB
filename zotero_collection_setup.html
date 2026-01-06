@@ -1,1 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zotero Collection Setup - Epitope Erase Project</title>
+    <style>
+        :root {
+            --uwp-primary: #4B286D;
+            --uwp-secondary: #0069B4;
+            --uwp-accent: #43B02A;
+            --uwp-neutral: #F2F2F2;
+            --uwp-light: #FFFFFF;
+            --uwp-dark: #1A1A1A;
+            --uwp-text: #333333;
+            --uwp-card-bg: #FFFFFF;
+            --uwp-border: #D9D9D9;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            line-height: 1.6;
+            padding: 0;
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--uwp-primary) 0%, var(--uwp-secondary) 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .back-link {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .logo-icon {
+            background-color: white;
+            color: var(--uwp-primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .logo-text h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-text p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        /* Main Content */
+        .main-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .research-context {
+            background-color: rgba(67, 176, 42, 0.1);
+            border-left: 4px solid var(--uwp-accent);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .research-context h3 {
+            color: var(--uwp-primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Setup Steps */
+        .step-card {
+            background-color: var(--uwp-card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-top: 4px solid var(--uwp-secondary);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-number {
+            background-color: var(--uwp-primary);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .step-title {
+            font-size: 1.5rem;
+            color: var(--uwp-secondary);
+        }
+        
+        .step-content {
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content h4 {
+            color: var(--uwp-primary);
+            margin: 1.5rem 0 0.8rem 0;
+            font-size: 1.2rem;
+        }
+        
+        .step-content p {
+            margin-bottom: 1rem;
+        }
+        
+        .step-content ul, .step-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-content li {
+            margin-bottom: 0.8rem;
+            padding-left: 0.5rem;
+        }
+        
+        /* Collection Tree Structure */
+        .collection-tree {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+        }
+        
+        .tree-item {
+            margin-bottom: 0.3rem;
+            padding-left: 1.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tree-item:hover {
+            color: var(--uwp-secondary);
+            background-color: rgba(0, 105, 180, 0.05);
+            border-radius: 4px;
+            padding-left: 1.8rem;
+        }
+        
+        .tree-item.folder::before {
+            content: "📁";
+            position: absolute;
+            left: 0;
+        }
+        
+        .tree-item.file::before {
+            content: "📄";
+            position: absolute;
+            left: 0;
+        }
+        
+        .tree-indent {
+            display: inline-block;
+            width: 1.5rem;
+        }
+        
+        /* Smart Collection Setup */
+        .smart-collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .smart-card {
+            background-color: #f0f7ff;
+            border: 1px solid #cce0ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .smart-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+        
+        .smart-icon {
+            background-color: var(--uwp-secondary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .smart-title {
+            font-weight: 700;
+            color: var(--uwp-primary);
+        }
+        
+        .smart-rule {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+        
+        /* Tag System */
+        .tag-system {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .tag-card {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .tag-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .tag-info {
+            flex: 1;
+        }
+        
+        .tag-name {
+            font-weight: 600;
+            color: var(--uwp-primary);
+            font-size: 0.95rem;
+        }
+        
+        .tag-description {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        /* Note Templates */
+        .note-templates {
+            background-color: #fef7ff;
+            border: 1px solid #e9d5ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .template-card {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .template-card:hover {
+            border-color: var(--uwp-secondary);
+            background-color: #f8f9ff;
+        }
+        
+        .template-title {
+            font-weight: 600;
+            color: var(--uwp-primary);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .template-content {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #555;
+            background-color: #f9fafb;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+            white-space: pre-wrap;
+            display: none;
+        }
+        
+        /* Saved Search Interface */
+        .search-interface {
+            background-color: #f8f9fa;
+            border: 2px solid var(--uwp-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .search-preview {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .search-field {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background-color: #f9fafb;
+            border-radius: 4px;
+        }
+        
+        .field-name {
+            font-weight: 600;
+            color: var(--uwp-secondary);
+            min-width: 120px;
+        }
+        
+        .field-value {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* Code/Technical Blocks */
+        code {
+            background-color: #f1f3f5;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #d63384;
+        }
+        
+        .technical-box {
+            background-color: #f8f9ff;
+            border: 1px solid #d0d7ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        /* Alert Boxes */
+        .tip-box {
+            background-color: #e8f4ff;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        .warning-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        .success-box {
+            background-color: #d1fae5;
+            border-left: 4px solid var(--uwp-accent);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--uwp-secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #005593;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            border: 1px solid var(--uwp-border);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+        
+        /* Progress Indicator */
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--uwp-border);
+        }
+        
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--uwp-border);
+            z-index: 1;
+        }
+        
+        .progress-step.active::after {
+            background-color: var(--uwp-accent);
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            z-index: 2;
+            border: 2px solid var(--uwp-border);
+        }
+        
+        .progress-step.active .step-circle {
+            background-color: var(--uwp-accent);
+            color: white;
+            border-color: var(--uwp-accent);
+        }
+        
+        .step-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-step.active .step-label {
+            color: var(--uwp-primary);
+            font-weight: 600;
+        }
+        
+        /* Collection Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .stat-card {
+            background-color: #f0f7ff;
+            border: 1px solid #cce0ff;
+            border-radius: 8px;
+            padding: 1.2rem;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--uwp-secondary);
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .step-card {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .progress-indicator {
+                flex-wrap: wrap;
+                gap: 1rem;
+            }
+            
+            .progress-step:not(:last-child)::after {
+                display: none;
+            }
+            
+            .smart-collection-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tag-system {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="back-link">← Back to Epitope Erase Dashboard</a>
+            <div class="logo-container">
+                <div class="logo-icon">📚</div>
+                <div class="logo-text">
+                    <h1>Zotero Collection Setup Guide</h1>
+                    <p>Organize Your Enzymatic Allergen Research Library</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <div class="research-context">
+            <h3>🔬 Research Context: Epitope Erase Project</h3>
+            <p>This collection structure is specifically designed for organizing research on enzymatic allergen denaturation. It will help you efficiently manage papers on protease applications, sprayable formulations, validation methods, and regulatory considerations.</p>
+        </div>
+        
+        <div class="progress-indicator">
+            <div class="progress-step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">Collection Structure</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">2</div>
+                <div class="step-label">Tags & Metadata</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">3</div>
+                <div class="step-label">Smart Collections</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle">4</div>
+                <div class="step-label">Notes & Templates</div>
+            </div>
+        </div>
+        
+        <!-- Step 1: Collection Structure -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">1</div>
+                <h2 class="step-title">Create Your Collection Structure</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Build a hierarchical collection structure that mirrors your enzymatic research workflow and thinking process.</p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Main Collection</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">Primary Categories</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value">12+</div>
+                        <div class="stat-label">Subcollections</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Expected Papers</div>
+                    </div>
+                </div>
+                
+                <h4>Complete Collection Structure:</h4>
+                
+                <div class="collection-tree">
+                    <div class="tree-item folder">📁 Epitope Erase Research</div>
+                    
+                    <div class="tree-item folder"><span class="tree-indent"></span>📁 1. Enzymatic Methods</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Subtilisin Applications</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Papain & Trypsin Studies</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Enzyme Stability & Kinetics</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Enzyme Combinations & Synergies</div>
+                    
+                    <div class="tree-item folder"><span class="tree-indent"></span>📁 2. Surface & Application</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Stainless Steel Surfaces</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Plastic & Polymer Surfaces</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Sprayable Formulations</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Industrial Application Studies</div>
+                    
+                    <div class="tree-item folder"><span class="tree-indent"></span>📁 3. Validation Methods</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 ELISA Protocols & Validation</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Surface Swabbing Techniques</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 FTIR & Spectroscopic Analysis</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Control Methods & Standards</div>
+                    
+                    <div class="tree-item folder"><span class="tree-indent"></span>📁 4. Regulatory & Standards</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 FDA Guidelines & Regulations</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 EU Regulations & EFSA</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 GB 7718 (China) Standards</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 VITAL 3.0 & Industry Standards</div>
+                    
+                    <div class="tree-item folder"><span class="tree-indent"></span>📁 5. Experimental Design</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Methodology Papers</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Statistical Methods</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Cost Analysis Studies</div>
+                    
+                    <div class="tree-item folder"><span class="tree-indent"></span>📁 6. Literature Reviews</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Comprehensive Reviews</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Systematic Reviews</div>
+                    <div class="tree-item file"><span class="tree-indent"></span><span class="tree-indent"></span>📄 Meta-Analyses</div>
+                </div>
+                
+                <h4>Creating Collections in Zotero:</h4>
+                
+                <div class="technical-box">
+                    Step-by-step:
+                    1. Right-click in the left panel → "New Collection"
+                    2. Name: "Epitope Erase Research"
+                    3. Right-click the new collection → "New Subcollection"
+                    4. Create all subcollections following the structure above
+                    5. Use drag-and-drop to organize hierarchy
+                </div>
+                
+                <h4>Collection Descriptions (Optional but Recommended):</h4>
+                <p>Add descriptions to each collection to document their purpose:</p>
+                <ul>
+                    <li><strong>Subtilisin Applications:</strong> Papers specifically on subtilisin protease for allergen removal, including concentration studies, contact time optimization, and comparative effectiveness.</li>
+                    <li><strong>Sprayable Formulations:</strong> Studies on enzyme delivery systems, foam/spray applications, industrial implementation feasibility.</li>
+                    <li><strong>ELISA Protocols:</strong> Validation methods, detection limits, comparative studies of different ELISA kits for allergen detection.</li>
+                    <li><strong>FDA Guidelines:</strong> Regulatory documents, guidance papers, compliance requirements for enzymatic cleaning in food facilities.</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <h4>🎯 Collection Strategy Tips</h4>
+                    <p>1. <strong>Start broad, then narrow:</strong> Begin with main categories, add specifics as your collection grows
+                    <br>2. <strong>One paper, multiple collections:</strong> Papers can appear in multiple collections (they're virtual copies)
+                    <br>3. <strong>Regular review:</strong> Monthly, review collections and adjust structure as needed
+                    <br>4. <strong>Balance depth vs. breadth:</strong> Avoid too many levels (max 3-4), but ensure meaningful organization
+                    <br>5. <strong>Future-proof:</strong> Create collections for planned research directions</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 2: Tags & Metadata -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">2</div>
+                <h2 class="step-title">Configure Tags & Metadata System</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Create a comprehensive tagging system to enable powerful searching and filtering of your enzymatic research papers.</p>
+                
+                <h4>Essential Tag Categories for Enzymatic Research:</h4>
+                
+                <div class="tag-system">
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #43B02A;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">protease</div>
+                            <div class="tag-description">All papers about protease enzymes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #0069B4;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">subtilisin</div>
+                            <div class="tag-description">Specific to subtilisin protease studies</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #4B286D;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">peanut_allergen</div>
+                            <div class="tag-description">Focus on peanut allergen Ara h proteins</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #FF6B6B;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">sprayable</div>
+                            <div class="tag-description">Sprayable/foam formulations</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #FFC107;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">ELISA_validation</div>
+                            <div class="tag-description">Papers with ELISA validation methods</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #17A2B8;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">industrial_scale</div>
+                            <div class="tag-description">Large-scale application studies</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #6F42C1;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">surface_stainless</div>
+                            <div class="tag-description">Stainless steel surface studies</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #20C997;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">cost_analysis</div>
+                            <div class="tag-description">Papers with cost/benefit analysis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #FD7E14;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">review_paper</div>
+                            <div class="tag-description">Review or meta-analysis papers</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #E83E8C;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">methodology</div>
+                            <div class="tag-description">Method-focused papers</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #6C757D;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">high_priority</div>
+                            <div class="tag-description">Must-read foundational papers</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tag-card">
+                        <div class="tag-color" style="background-color: #28A745;"></div>
+                        <div class="tag-info">
+                            <div class="tag-name">to_read</div>
+                            <div class="tag-description">Papers queued for reading</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>Creating and Managing Tags in Zotero:</h4>
+                
+                <div class="technical-box">
+                    1. Open Zotero and go to your library
+                    2. Click on the "Tags" tab in the right panel
+                    3. Right-click in tags area → "Create New Tag"
+                    4. Enter tag name (use lowercase_with_underscores)
+                    5. Click on tag color to assign color coding
+                    6. To apply tags to papers: select papers → right-click → "Add Tags"
+                </div>
+                
+                <h4>Tag Hierarchy (Parent-Child Tags):</h4>
+                <p>Create hierarchical relationships for better organization:</p>
+                
+                <div class="collection-tree">
+                    <div class="tree-item">📁 enzyme_type</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• subtilisin</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• papain</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• trypsin</div>
+                    
+                    <div class="tree-item">📁 validation_method</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• ELISA</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• swabbing</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• FTIR</div>
+                    
+                    <div class="tree-item">📁 surface_material</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• stainless_steel</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• plastic</div>
+                    <div class="tree-item"><span class="tree-indent"></span>• ceramic</div>
+                </div>
+                
+                <h4>Automatic Tagging Rules:</h4>
+                <p>Configure Zotero to automatically apply tags based on criteria:</p>
+                
+                <div class="search-interface">
+                    <div class="search-preview">
+                        <h5>Automatic Tag Rule: "subtilisin"</h5>
+                        <div class="search-field">
+                            <span class="field-name">Field:</span>
+                            <span class="field-value">Title, Abstract, or Keywords</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Condition:</span>
+                            <span class="field-value">Contains "subtilisin"</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Action:</span>
+                            <span class="field-value">Add tag "subtilisin"</span>
+                        </div>
+                    </div>
+                    
+                    <div class="search-preview">
+                        <h5>Automatic Tag Rule: "ELISA"</h5>
+                        <div class="search-field">
+                            <span class="field-name">Field:</span>
+                            <span class="field-value">Title, Abstract, or Keywords</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Condition:</span>
+                            <span class="field-value">Contains "ELISA" or "enzyme-linked immunosorbent assay"</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Action:</span>
+                            <span class="field-value">Add tag "ELISA_validation"</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>🏷️ Tagging Best Practices</h4>
+                    <p>1. <strong>Consistent naming:</strong> Use lowercase_with_underscores
+                    <br>2. <strong>Color coding:</strong> Use consistent colors (green for enzymes, blue for methods, etc.)
+                    <br>3. <strong>Apply multiple tags:</strong> Average 3-5 tags per paper
+                    <br>4. <strong>Review periodically:</strong> Monthly tag cleanup and consolidation
+                    <br>5. <strong>Document your system:</strong> Keep a master list of tags and their meanings</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Step 3: Smart Collections -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">3</div>
+                <h2 class="step-title">Create Smart Collections</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Smart Collections automatically organize papers based on rules, saving you time and ensuring consistency.</p>
+                
+                <h4>Essential Smart Collections for Enzymatic Research:</h4>
+                
+                <div class="smart-collection-grid">
+                    <div class="smart-card">
+                        <div class="smart-header">
+                            <div class="smart-icon">🔥</div>
+                            <div class="smart-title">High Priority Reading</div>
+                        </div>
+                        <p>Papers that are foundational to your research.</p>
+                        <div class="smart-rule">Tag: high_priority</div>
+                        <div class="smart-rule">OR Tag: review_paper</div>
+                        <div class="smart-rule">AND NOT Tag: already_read</div>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-header">
+                            <div class="smart-icon">🧪</div>
+                            <div class="smart-title">Recent Methodology Papers</div>
+                        </div>
+                        <p>New methods and techniques for enzymatic cleaning.</p>
+                        <div class="smart-rule">Tag: methodology</div>
+                        <div class="smart-rule">Year: 2020-2025</div>
+                        <div class="smart-rule">Item Type: Journal Article</div>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-header">
+                            <div class="smart-icon">🏭</div>
+                            <div class="smart-title">Industrial Application Focus</div>
+                        </div>
+                        <p>Papers with practical, large-scale applications.</p>
+                        <div class="smart-rule">Tag: industrial_scale</div>
+                        <div class="smart-rule">OR Abstract contains: "factory" or "plant" or "industrial"</div>
+                        <div class="smart-rule">NOT Tag: laboratory_only</div>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-header">
+                            <div class="smart-icon">💸</div>
+                            <div class="smart-title">Cost-Benefit Analysis</div>
+                        </div>
+                        <p>Papers discussing economic aspects.</p>
+                        <div class="smart-rule">Tag: cost_analysis</div>
+                        <div class="smart-rule">OR Abstract contains: "cost" or "economic" or "feasibility"</div>
+                        <div class="smart-rule">NOT Tag: theoretical</div>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-header">
+                            <div class="smart-icon">📊</div>
+                            <div class="smart-title">Validation Methods Collection</div>
+                        </div>
+                        <p>All papers on validation and detection methods.</p>
+                        <div class="smart-rule">Tag: ELISA_validation</div>
+                        <div class="smart-rule">OR Tag: swabbing</div>
+                        <div class="smart-rule">OR Abstract contains: "validation" or "detection limit"</div>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-header">
+                            <div class="smart-icon">🚀</div>
+                            <div class="smart-title">Sprayable Formulations</div>
+                        </div>
+                        <p>Papers on delivery systems and formulations.</p>
+                        <div class="smart-rule">Tag: sprayable</div>
+                        <div class="smart-rule">OR Title contains: "spray" or "foam" or "formulation"</div>
+                        <div class="smart-rule">AND Tag: protease</div>
+                    </div>
+                </div>
+                
+                <h4>Creating Smart Collections in Zotero:</h4>
+                
+                <div class="technical-box">
+                    Step-by-step:
+                    1. Right-click on your library → "New Smart Collection"
+                    2. Name: e.g., "High Priority Reading"
+                    3. Click "+" to add conditions
+                    4. Configure rules (see examples above)
+                    5. Choose match: "any" (OR) or "all" (AND)
+                    6. Click "OK" to create
+                    
+                    Smart Collections update automatically as you add/remove papers!
+                </div>
+                
+                <h4>Advanced Smart Collection Examples:</h4>
+                
+                <div class="search-interface">
+                    <div class="search-preview">
+                        <h5>Smart Collection: "Recent Subtilisin Studies"</h5>
+                        <div class="search-field">
+                            <span class="field-name">Condition 1:</span>
+                            <span class="field-value">Tag contains "subtilisin"</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Condition 2:</span>
+                            <span class="field-value">Year is after 2018</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Condition 3:</span>
+                            <span class="field-value">Item Type is "Journal Article"</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Match:</span>
+                            <span class="field-value">ALL conditions</span>
+                        </div>
+                    </div>
+                    
+                    <div class="search-preview">
+                        <h5>Smart Collection: "To Read - Enzymatic Methods"</h5>
+                        <div class="search-field">
+                            <span class="field-name">Condition 1:</span>
+                            <span class="field-value">Tag is "to_read"</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Condition 2:</span>
+                            <span class="field-value">Collection is "Enzymatic Methods" or any subcollection</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Match:</span>
+                            <span class="field-value">ALL conditions</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tip-box">
+                    <h4>🚀 Advanced Smart Collection Strategies</h4>
+                    <p>1. <strong>Nested Smart Collections:</strong> Create Smart Collections based on other Smart Collections
+                    <br>2. <strong>Temporal Collections:</strong> "Added in Last 30 Days" for staying current
+                    <br>3. <strong>Priority Collections:</strong> Combine multiple tags for priority filtering
+                    <br>4. <strong>Export-Ready Collections:</strong> Smart Collections for specific outputs (grants, papers, presentations)
+                    <br>5. <strong>Collaboration Collections:</strong> Smart Collections showing papers relevant to specific collaborators</p>
+                </div>
+                
+                <h4>Maintenance Schedule for Smart Collections:</h4>
+                <ul>
+                    <li><strong>Weekly:</strong> Review "To Read" collections</li>
+                    <li><strong>Monthly:</strong> Update date-based rules (e.g., "Recent" should move forward)</li>
+                    <li><strong>Quarterly:</strong> Review and optimize all Smart Collection rules</li>
+                    <li><strong>Annually:</strong> Archive old Smart Collections, create new ones for new directions</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Step 4: Notes & Templates -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number">4</div>
+                <h2 class="step-title">Configure Notes & Analysis Templates</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Create consistent note templates for analyzing enzymatic research papers, ensuring systematic evaluation and easy retrieval of key information.</p>
+                
+                <h4>Essential Note Templates for Enzymatic Research:</h4>
+                
+                <div class="note-templates">
+                    <div class="template-card" onclick="toggleTemplate(this)">
+                        <div class="template-title">
+                            <span>📄</span> Standard Paper Analysis Template
+                        </div>
+                        <div class="template-content">
+# Paper Analysis: [Paper Title]
 
+## Basic Information
+- **DOI:** [DOI]
+- **Journal:** [Journal Name]
+- **Year:** [Year]
+- **Authors:** [Author List]
+
+## Research Focus
+- **Enzyme(s) Used:** [List enzymes]
+- **Allergen(s) Tested:** [List allergens]
+- **Surface(s) Tested:** [List surfaces]
+- **Main Objective:** [Brief objective]
+
+## Key Methods
+- **Enzyme Concentration:** [Range tested]
+- **Contact Time:** [Time range]
+- **pH/Temperature:** [Conditions]
+- **Validation Method:** [ELISA type, swabbing, etc.]
+- **Detection Limit:** [LOD/LOQ if provided]
+
+## Key Findings
+1. [Finding 1 with numbers/percentages]
+2. [Finding 2 with numbers/percentages]
+3. [Finding 3 with numbers/percentages]
+
+## Effectiveness Metrics
+- **Maximum Allergen Removal:** [%]
+- **Optimal Conditions:** [Concentration, time, etc.]
+- **Comparison to Controls:** [% improvement]
+
+## Limitations Mentioned
+1. [Limitation 1]
+2. [Limitation 2]
+3. [Limitation 3]
+
+## Future Directions (from paper)
+- [Future direction 1]
+- [Future direction 2]
+
+## My Research Connection
+- **Relevance to Epitope Erase:** [How this connects]
+- **Potential Experiments:** [Ideas inspired]
+- **Citations Needed:** [Papers to follow up on]
+
+## Tags to Add
+- [Tag 1], [Tag 2], [Tag 3]
+
+## Date Analyzed: [Date]
+                        </div>
+                    </div>
+                    
+                    <div class="template-card" onclick="toggleTemplate(this)">
+                        <div class="template-title">
+                            <span>🧪</span> Method-Specific Analysis Template
+                        </div>
+                        <div class="template-content">
+# Method Analysis: [Method Name from Paper]
+
+## Method Overview
+- **Purpose:** [What the method measures]
+- **Principle:** [Scientific principle behind method]
+- **Equipment Needed:** [List equipment]
+
+## Detailed Protocol
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+## Key Parameters
+- **Sample Preparation:** [Details]
+- **Incubation Conditions:** [Time, temperature]
+- **Detection Method:** [Details]
+- **Calibration:** [Standards used]
+
+## Validation Data
+- **Linearity Range:** [Range with R²]
+- **Detection Limit (LOD):** [Value]
+- **Quantification Limit (LOQ):** [Value]
+- **Precision (CV%):** [Value]
+- **Accuracy (Recovery %):** [Value]
+
+## Advantages for Enzymatic Research
+1. [Advantage 1]
+2. [Advantage 2]
+3. [Advantage 3]
+
+## Limitations for Our Application
+1. [Limitation 1]
+2. [Limitation 2]
+
+## Adaptation for Our Needs
+- **Modifications Needed:** [Changes required]
+- **Cost Estimate:** [Approximate cost]
+- **Time Requirement:** [Estimated time]
+
+## References to Review
+- [Key reference 1]
+- [Key reference 2]
+                        </div>
+                    </div>
+                    
+                    <div class="template-card" onclick="toggleTemplate(this)">
+                        <div class="template-title">
+                            <span>💡</span> Research Gap Analysis Template
+                        </div>
+                        <div class="template-content">
+# Research Gap Analysis
+
+## Paper(s) Analyzed
+- [Paper 1: Title]
+- [Paper 2: Title]
+- [Paper 3: Title]
+
+## Current State of Knowledge
+1. [Established fact 1]
+2. [Established fact 2]
+3. [Established fact 3]
+
+## Consensus Areas
+- [Area of agreement 1]
+- [Area of agreement 2]
+
+## Controversial/Unclear Areas
+- [Controversy 1 with competing views]
+- [Controversy 2 with competing views]
+
+## Identified Gaps
+### Gap 1: [Specific gap]
+- **Evidence of gap:** [Why this is a gap]
+- **Importance:** [Why filling this matters]
+- **Potential approach:** [How to address]
+
+### Gap 2: [Specific gap]
+- **Evidence of gap:** [Why this is a gap]
+- **Importance:** [Why filling this matters]
+- **Potential approach:** [How to address]
+
+## Methodological Gaps
+- [Missing validation methods]
+- [Lack of standardization]
+- [Unaddressed variables]
+
+## Application Gaps
+- [Missing real-world applications]
+- [Unstudied surfaces/materials]
+- [Lack of cost analysis]
+
+## Experiment Ideas to Address Gaps
+1. [Experiment 1 with hypothesis]
+2. [Experiment 2 with hypothesis]
+3. [Experiment 3 with hypothesis]
+
+## Date of Analysis: [Date]
+                        </div>
+                    </div>
+                    
+                    <div class="template-card" onclick="toggleTemplate(this)">
+                        <div class="template-title">
+                            <span>📊</span> Comparative Analysis Template
+                        </div>
+                        <div class="template-content">
+# Comparative Analysis: [Topic]
+
+## Papers Compared
+1. [Paper 1: Author et al., Year]
+2. [Paper 2: Author et al., Year]
+3. [Paper 3: Author et al., Year]
+
+## Comparison Table
+
+| Parameter | Paper 1 | Paper 2 | Paper 3 | Notes |
+|-----------|---------|---------|---------|-------|
+| Enzyme Used | | | | |
+| Concentration | | | | |
+| Contact Time | | | | |
+| Surface | | | | |
+| Allergen | | | | |
+| Validation Method | | | | |
+| Effectiveness (%) | | | | |
+| Detection Limit | | | | |
+| Cost Mentioned | | | | |
+| Industrial Focus | | | | |
+
+## Key Similarities
+1. [Similarity 1]
+2. [Similarity 2]
+3. [Similarity 3]
+
+## Key Differences
+1. [Difference 1]
+2. [Difference 2]
+3. [Difference 3]
+
+## Trends Identified
+- [Trend 1 with explanation]
+- [Trend 2 with explanation]
+- [Trend 3 with explanation]
+
+## Best Practices Summary
+1. [Best practice 1]
+2. [Best practice 2]
+3. [Best practice 3]
+
+## Remaining Questions
+1. [Question 1]
+2. [Question 2]
+3. [Question 3]
+
+## Synthesis for Epitope Erase
+- **Optimal approach based on comparison:** [Recommendation]
+- **Parameters to test:** [Specific tests needed]
+- **Avoid these pitfalls:** [Problems to avoid]
+
+## Date of Comparison: [Date]
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>Creating and Using Note Templates in Zotero:</h4>
+                
+                <div class="technical-box">
+                    Step-by-step note creation:
+                    1. Select a paper in your library
+                    2. Click the "Notes" tab in the right panel
+                    3. Click "Add" to create a new note
+                    4. Paste your chosen template
+                    5. Fill in the template with paper-specific information
+                    6. Save the note (auto-saves as you type)
+                    
+                    Pro tip: Create a "Templates" collection in Zotero with these templates as notes for easy copying!
+                </div>
+                
+                <h4>Advanced Note Features:</h4>
+                
+                <div class="search-interface">
+                    <div class="search-preview">
+                        <h5>Note Linking and Connections</h5>
+                        <div class="search-field">
+                            <span class="field-name">Link Papers:</span>
+                            <span class="field-value">Drag one paper onto another in Zotero to create "Related" links</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Note-to-Note Links:</span>
+                            <span class="field-value">Use Zotero's internal linking: zotero://select/items/[itemKey]</span>
+                        </div>
+                        <div class="search-field">
+                            <span class="field-name">Tag Notes:</span>
+                            <span class="field-value">Add tags to notes themselves for organization</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4>Note Organization Strategy:</h4>
+                <ul>
+                    <li><strong>Standardized Structure:</strong> Use consistent templates for comparable analysis</li>
+                    <li><strong>Keyword Rich:</strong> Include key terms for searching</li>
+                    <li><strong>Date Stamped:</strong> Always include analysis date</li>
+                    <li><strong>Action Oriented:</strong> Include "next steps" or "research connections"</li>
+                    <li><strong>Regular Review:</strong> Monthly review of notes to identify patterns</li>
+                </ul>
+                
+                <div class="tip-box">
+                    <h4>📝 Note-Taking Workflow</h4>
+                    <p>1. <strong>First Pass (5 min):</strong> Skim paper, add to "Epitope Erase Research" collection
+                    <br>2. <strong>Second Pass (15 min):</strong> Read abstract/introduction/conclusion, apply initial tags
+                    <br>3. <strong>Deep Analysis (30-60 min):</strong> Use template for detailed analysis
+                    <br>4. <strong>Synthesis (Monthly):</strong> Review all notes on a topic, create comparative analysis
+                    <br>5. <strong>Extraction (As needed):</strong> Pull data from notes for writing proposals/papers</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Next Steps -->
+        <div class="step-card">
+            <div class="step-header">
+                <h2 class="step-title">✅ Collection Setup Complete - Research Library Ready</h2>
+            </div>
+            
+            <div class="step-content">
+                <p>Your Zotero library is now optimized for enzymatic allergen research. Verify your setup:</p>
+                
+                <h4>Final Verification Checklist:</h4>
+                <ol>
+                    <li>✓ "Epitope Erase Research" main collection created</li>
+                    <li>✓ All subcollections created following recommended structure</li>
+                    <li>✓ Tag system configured with colors and hierarchy</li>
+                    <li>✓ Essential Smart Collections created and tested</li>
+                    <li>✓ Note templates saved for consistent paper analysis</li>
+                    <li>✓ Test papers imported and organized correctly</li>
+                    <li>✓ Tags applied to test papers</li>
+                    <li>✓ Smart Collections showing appropriate papers</li>
+                    <li>✓ Note templates used for initial paper analysis</li>
+                </ol>
+                
+                <h4>Immediate Next Steps:</h4>
+                <div class="smart-collection-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div class="smart-card">
+                        <div class="smart-icon">📥</div>
+                        <div class="smart-title">Import Papers</div>
+                        <p>Begin importing your enzymatic research papers</p>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-icon">🏷️</div>
+                        <div class="smart-title">Apply Tags</div>
+                        <p>Tag first 10 papers using your new system</p>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-icon">📝</div>
+                        <div class="smart-title">Create Notes</div>
+                        <p>Analyze 5 key papers using your templates</p>
+                    </div>
+                    
+                    <div class="smart-card">
+                        <div class="smart-icon">🔍</div>
+                        <div class="smart-title">Test Search</div>
+                        <p>Test searching by tags and collections</p>
+                    </div>
+                </div>
+                
+                <h4>Maintenance Schedule:</h4>
+                <ul>
+                    <li><strong>Daily:</strong> Add new papers, apply initial tags</li>
+                    <li><strong>Weekly:</strong> Review "To Read" collections, update notes</li>
+                    <li><strong>Monthly:</strong> Clean up tags, review Smart Collections, backup library</li>
+                    <li><strong>Quarterly:</strong> Review collection structure, adjust as research evolves</li>
+                    <li><strong>Annually:</strong> Major reorganization, archive completed projects</li>
+                </ul>
+                
+                <div class="success-box">
+                    <h4>🎉 Ready for Organized Research!</h4>
+                    <p>Your Zotero library is now a powerful research management tool specifically configured for enzymatic allergen studies. You can efficiently organize, tag, search, and analyze papers on subtilisin, papain, sprayable formulations, validation methods, and regulatory standards.</p>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="researchrabbit_zotero_link.html" class="btn btn-secondary">← Back to ResearchRabbit-Zotero Link</a>
+                <a href="index.html" class="btn btn-secondary">Return to Dashboard</a>
+                <a href="sync_check.html" class="btn btn-primary">Next: Sync Check →</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Epitope Erase Project | Zotero Collection Setup Guide | Personalized for RogmanDB's Enzymatic Allergen Research</p>
+        <p>© 2025 University Research System | UWP Color Scheme Compliant</p>
+    </div>
+
+    <script>
+        // Toggle template display
+        function toggleTemplate(element) {
+            const templateContent = element.querySelector('.template-content');
+            if (templateContent.style.display === 'block') {
+                templateContent.style.display = 'none';
+            } else {
+                templateContent.style.display = 'block';
+                
+                // Copy to clipboard on click
+                templateContent.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const text = this.textContent;
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = '✓ Template copied to clipboard!';
+                        this.style.backgroundColor = '#d1fae5';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.backgroundColor = '';
+                        }, 1500);
+                    });
+                });
+            }
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add checkboxes to steps for user tracking
+            const steps = document.querySelectorAll('.step-card');
+            steps.forEach((step, index) => {
+                const header = step.querySelector('.step-header');
+                if (header && index < steps.length - 1) { // Skip the last "Next Steps" card
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.id = `step-${index + 1}`;
+                    checkbox.style.marginLeft = 'auto';
+                    checkbox.style.width = '24px';
+                    checkbox.style.height = '24px';
+                    checkbox.style.cursor = 'pointer';
+                    checkbox.style.accentColor = 'var(--uwp-accent)';
+                    
+                    checkbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            const stepNumber = this.id.split('-')[1];
+                            const progressStep = document.querySelector(`.progress-step:nth-child(${stepNumber})`);
+                            if (progressStep) {
+                                progressStep.classList.add('active');
+                                
+                                // Auto-check next step
+                                const nextStep = document.querySelector(`.progress-step:nth-child(${parseInt(stepNumber) + 1})`);
+                                if (nextStep && !nextStep.classList.contains('active')) {
+                                    setTimeout(() => {
+                                        nextStep.classList.add('active');
+                                    }, 300);
+                                }
+                            }
+                        }
+                    });
+                    
+                    header.appendChild(checkbox);
+                }
+            });
+            
+            // Add click functionality to progress steps
+            document.querySelectorAll('.progress-step').forEach(step => {
+                step.addEventListener('click', function() {
+                    const stepNumber = this.querySelector('.step-circle').textContent;
+                    const targetCard = document.querySelector(`.step-card:nth-child(${parseInt(stepNumber)})`);
+                    
+                    if (targetCard) {
+                        targetCard.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Add click functionality to tree items
+            document.querySelectorAll('.tree-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const collectionName = this.textContent.replace(/[📁📄]/g, '').trim();
+                    alert(`Collection: ${collectionName}\n\nClick "OK" to mark as created.`);
+                    
+                    // Mark as completed
+                    this.style.textDecoration = 'line-through';
+                    this.style.opacity = '0.7';
+                    this.style.color = 'var(--uwp-accent)';
+                });
+            });
+            
+            // Add copy functionality to technical boxes
+            document.querySelectorAll('.technical-box').forEach(box => {
+                box.style.cursor = 'pointer';
+                box.title = 'Click to copy instructions';
+                
+                box.addEventListener('click', function() {
+                    const text = this.textContent.trim();
+                    navigator.clipboard.writeText(text).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = "✓ Instructions copied!";
+                        this.style.backgroundColor = '#d1fae5';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.backgroundColor = '';
+                        }, 1500);
+                    });
+                });
+            });
+            
+            // Make tag cards interactive
+            document.querySelectorAll('.tag-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const tagName = this.querySelector('.tag-name').textContent;
+                    const tagColor = this.querySelector('.tag-color').style.backgroundColor;
+                    
+                    alert(`Tag: ${tagName}\nColor: ${tagColor}\n\nClick "OK" to mark as created.`);
+                    
+                    // Mark as completed
+                    this.style.border = '2px solid var(--uwp-accent)';
+                    this.style.backgroundColor = '#f0fff4';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
