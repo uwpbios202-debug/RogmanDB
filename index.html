@@ -3,318 +3,748 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dahlia Research System: Allergen Denaturation</title>
+    <title>Epitope Erase: Enzymatic Allergen Denaturation System</title>
     <style>
         :root {
-            --primary: #2563eb;
-            --secondary: #1e40af;
-            --bg: #f3f4f6;
-            --card-bg: #ffffff;
-            --text: #1f2937;
-            --accent: #10b981;
+            /* UWP Color Scheme */
+            --uwp-primary: #4B286D; /* UWP Purple */
+            --uwp-secondary: #0069B4; /* UWP Blue */
+            --uwp-accent: #43B02A; /* UWP Green */
+            --uwp-neutral: #F2F2F2;
+            --uwp-light: #FFFFFF;
+            --uwp-dark: #1A1A1A;
+            --uwp-warning: #FFC72C;
+            --uwp-text: #333333;
+            --uwp-card-bg: #FFFFFF;
+            --uwp-border: #D9D9D9;
         }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--uwp-neutral);
+            color: var(--uwp-text);
             margin: 0;
-            display: flex;
-            height: 100vh;
+            padding: 0;
+            line-height: 1.6;
         }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--uwp-primary) 0%, var(--uwp-secondary) 100%);
+            color: white;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 0.2rem;
+        }
+        
+        .user-info {
+            background-color: rgba(255, 255, 255, 0.15);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 2rem auto;
+            gap: 2rem;
+            padding: 0 1rem;
+        }
+        
         /* Sidebar */
         .sidebar {
-            width: 250px;
-            background-color: var(--card-bg);
-            border-right: 1px solid #e5e7eb;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
+            width: 280px;
+            flex-shrink: 0;
+            background-color: var(--uwp-card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            height: fit-content;
         }
+        
         .sidebar h2 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            color: var(--primary);
+            color: var(--uwp-primary);
+            font-size: 1.3rem;
+            margin-top: 0;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--uwp-accent);
         }
+        
         .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
             background: none;
             border: none;
             text-align: left;
-            padding: 12px;
-            margin-bottom: 5px;
+            padding: 0.9rem 1rem;
+            margin-bottom: 0.5rem;
             cursor: pointer;
             border-radius: 6px;
             font-weight: 500;
-            color: #4b5563;
-            transition: all 0.2s;
+            color: var(--uwp-text);
+            transition: all 0.2s ease;
+            font-size: 1rem;
         }
+        
         .nav-btn:hover {
-            background-color: #eff6ff;
-            color: var(--primary);
+            background-color: rgba(75, 40, 109, 0.08);
+            color: var(--uwp-primary);
+            transform: translateX(5px);
         }
+        
         .nav-btn.active {
-            background-color: var(--primary);
+            background-color: var(--uwp-primary);
             color: white;
+            box-shadow: 0 3px 8px rgba(75, 40, 109, 0.3);
         }
-
+        
+        .nav-btn .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            font-size: 0.85rem;
+        }
+        
+        .nav-btn.active .step-number {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
         /* Main Content */
-        .main {
+        .main-content {
             flex: 1;
-            padding: 40px;
-            overflow-y: auto;
+            background-color: var(--uwp-card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 2rem;
         }
+        
         .section {
             display: none;
-            max-width: 900px;
-            margin: 0 auto;
         }
+        
         .section.active {
             display: block;
+            animation: fadeIn 0.5s ease;
         }
-        h1 { margin-bottom: 10px; }
-        .subtitle { color: #6b7280; margin-bottom: 30px; font-size: 1.1rem; }
         
-        /* Cards & Interactive Elements */
-        .card {
-            background: var(--card-bg);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .checklist-item {
+        
+        .section-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--uwp-border);
+        }
+        
+        .section-header h1 {
+            color: var(--uwp-primary);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.8rem;
+        }
+        
+        .section-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        /* Cards */
+        .card {
+            background-color: var(--uwp-light);
+            border-radius: 8px;
+            padding: 1.8rem;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--uwp-accent);
+        }
+        
+        .card h3 {
+            color: var(--uwp-secondary);
+            margin-top: 0;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
-            font-size: 1.05rem;
+            gap: 0.5rem;
         }
+        
+        /* Installation Checklist */
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            padding: 0.8rem;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        
+        .checklist-item:hover {
+            background-color: rgba(67, 176, 42, 0.05);
+        }
+        
         .checklist-item input {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
+            accent-color: var(--uwp-accent);
+        }
+        
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .checklist-link {
+            color: var(--uwp-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .checklist-link:hover {
+            background-color: rgba(0, 105, 180, 0.1);
+            text-decoration: underline;
+        }
+        
+        .checklist-link::after {
+            content: "↗";
+            font-size: 0.9rem;
         }
         
         /* Prompt Box Styling */
         .prompt-box {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
+            background-color: #F8F9FF;
+            border: 1px solid #E0E7FF;
+            border-left: 4px solid var(--uwp-secondary);
+            padding: 1.2rem;
+            border-radius: 6px;
+            margin-top: 1rem;
             position: relative;
         }
+        
         .prompt-text {
             font-family: 'Courier New', Courier, monospace;
             font-size: 0.95rem;
-            color: #334155;
+            color: #2D3748;
             white-space: pre-wrap;
+            line-height: 1.5;
+            margin: 0 0 1rem 0;
         }
+        
         .copy-btn {
-            background-color: white;
-            border: 1px solid #cbd5e1;
-            padding: 5px 10px;
+            background-color: var(--uwp-secondary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            margin-top: 10px;
             display: inline-flex;
             align-items: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
         }
-        .copy-btn:hover { background-color: #f1f5f9; }
+        
+        .copy-btn:hover {
+            background-color: #005593;
+            transform: translateY(-2px);
+        }
+        
         .tag {
             display: inline-block;
-            background: #e0f2fe;
-            color: #0369a1;
-            padding: 2px 8px;
-            border-radius: 12px;
+            background: #E8F4FF;
+            color: var(--uwp-secondary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
             font-size: 0.75rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-
-        /* Text Areas for Notes */
+        
+        /* Text Areas */
         textarea {
             width: 100%;
-            height: 150px;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-            font-family: inherit;
-            margin-top: 10px;
-            resize: vertical;
-        }
-
-        /* Regions */
-        .region-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .region-badge {
-            background: #ecfdf5;
-            color: #047857;
-            text-align: center;
-            padding: 8px;
+            padding: 1rem;
+            border: 1px solid var(--uwp-border);
             border-radius: 6px;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            resize: vertical;
+            transition: border 0.2s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--uwp-secondary);
+            box-shadow: 0 0 0 3px rgba(0, 105, 180, 0.1);
+        }
+        
+        /* Research Focus Banner */
+        .research-focus {
+            background: linear-gradient(to right, rgba(67, 176, 42, 0.1), rgba(75, 40, 109, 0.1));
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--uwp-accent);
+        }
+        
+        .research-focus h4 {
+            color: var(--uwp-primary);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Progress Bar */
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #E9ECEF;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--uwp-accent), var(--uwp-secondary));
+            border-radius: 4px;
+            width: 25%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
             font-size: 0.9rem;
-            border: 1px solid #a7f3d0;
+            color: #666;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid var(--uwp-border);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .main-content, .sidebar {
+                padding: 1.5rem;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="sidebar">
-        <h2>🔬 Dahlia Research</h2>
-        <button class="nav-btn active" onclick="showSection('step1')">Step 1: Tools Setup</button>
-        <button class="nav-btn" onclick="showSection('step2')">Step 2: Literature Search</button>
-        <button class="nav-btn" onclick="showSection('step3')">Step 3: Gaps & Analysis</button>
-        <button class="nav-btn" onclick="showSection('step4')">Step 4: Draft Proposal</button>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div>
+                    <h1>Epitope Erase</h1>
+                    <div class="logo-subtitle">Enzymatic Allergen Denaturation System | RogmanDB Research Portal</div>
+                </div>
+            </div>
+            <div class="user-info">
+                Researcher: RogmanDB | Focus: Enzymatic Protease Development
+            </div>
+        </div>
     </div>
-
-    <div class="main">
-        
-        <div id="step1" class="section active">
-            <h1>Step 1: Tools Needed</h1>
-            <p class="subtitle">Goal: Build your "Second Brain" for research.</p>
+    
+    <div class="main-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h2>Research Workflow</h2>
+            <button class="nav-btn active" onclick="showSection('step1')">
+                <span class="step-number">1</span>
+                <span>Tools Setup & Installation</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('step2')">
+                <span class="step-number">2</span>
+                <span>Literature Search Strategy</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('step3')">
+                <span class="step-number">3</span>
+                <span>Gaps & Experiment Design</span>
+            </button>
+            <button class="nav-btn" onclick="showSection('step4')">
+                <span class="step-number">4</span>
+                <span>Proposal Draft & Refinement</span>
+            </button>
             
-            <div class="card">
-                <h3>🛠️ Installation Checklist</h3>
-                <div class="checklist-item"><input type="checkbox"> Sign up for <strong>ResearchRabbit</strong></div>
-                <div class="checklist-item"><input type="checkbox"> Download & Install <strong>Zotero</strong></div>
-                <div class="checklist-item"><input type="checkbox"> Add Zotero Connector to Chrome/Edge</div>
-                <div class="checklist-item"><input type="checkbox"> Install "ARIA" (or similar AI) plugin for Zotero</div>
-                <div class="checklist-item"><input type="checkbox"> Log into AI Account (Copilot/ChatGPT/Deepseek)</div>
-            </div>
-
-            <div class="card">
-                <h3>🔗 Connection Protocol</h3>
-                <div class="checklist-item"><input type="checkbox"> Link ResearchRabbit to Zotero (Import Collection)</div>
-                <div class="checklist-item"><input type="checkbox"> Create Zotero Collection: <strong>'Dahlia Research'</strong></div>
-                <div class="checklist-item"><input type="checkbox"> <strong>Sync Check:</strong> Verify a paper added in ResearchRabbit appears in Zotero.</div>
-            </div>
-        </div>
-
-        <div id="step2" class="section">
-            <h1>Step 2: Summarize Papers</h1>
-            <p class="subtitle">Goal: Use AI to gather the body of work globally.</p>
-
-            <div class="card">
-                <span class="tag">Basic Search</span>
-                <h3>Prompt 1: Broad Landscape</h3>
-                <div class="prompt-box">
-                    <div class="prompt-text">Please help me find the 10 most recent scholarly articles on Denaturing food Allergens on surfaces.</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span>Progress</span>
+                    <span id="progressPercent">25%</span>
                 </div>
             </div>
-
-            <div class="card">
-                <span class="tag">Regional & Specific</span>
-                <h3>Prompt 2 (Expanded): Global Deep Dives</h3>
-                <p>Use these prompts to ensure you capture international data:</p>
+            
+            <div class="research-focus">
+                <h4>🔬 Research Focus: Enzymatic Methods</h4>
+                <p><strong>Protease-based denaturation</strong> of peanut allergens on food contact surfaces. Developing a sprayable enzyme foam for industrial applications.</p>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Step 1: Tools Setup -->
+            <div id="step1" class="section active">
+                <div class="section-header">
+                    <h1>Step 1: Research Tools Setup</h1>
+                    <p class="section-subtitle">Goal: Build your "Second Brain" for efficient research workflow</p>
+                </div>
                 
-                <div class="prompt-box">
-                    <div class="prompt-text">Please find recent scholarly articles (2020-2025) specifically regarding "surface protein denaturation" or "allergen cleaning validation" in food manufacturing contexts within <strong>China, India, and Australia</strong>. Include specific references to GB 7718 (China) or VITAL 3.0 (Australia/EU) standards.</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                <div class="research-focus">
+                    <h4>🎯 Personalization for RogmanDB</h4>
+                    <p>This setup is optimized for your research on <strong>enzymatic allergen denaturation using proteases</strong>. Each tool will help you track papers on subtilisin, papain, and sprayable enzyme formulations.</p>
+                </div>
+                
+                <div class="card">
+                    <h3>🛠️ Installation Checklist</h3>
+                    <p>Click each link for detailed setup instructions:</p>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item1">
+                        <label for="item1">
+                            Sign up for <a href="researchrabbit_setup.html" target="_blank" class="checklist-link">ResearchRabbit</a>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">Create collections for "protease cleaning", "allergen denaturation", and "enzyme stability"</div>
+                        </label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item2">
+                        <label for="item2">
+                            Download & Install <a href="zotero_setup.html" target="_blank" class="checklist-link">Zotero</a>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">Configure for enzymatic allergen research with proper tagging system</div>
+                        </label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item3">
+                        <label for="item3">
+                            Add <a href="zotero_connector_setup.html" target="_blank" class="checklist-link">Zotero Connector</a> to Chrome/Edge
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">Enable one-click saving of enzyme-related papers</div>
+                        </label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item4">
+                        <label for="item4">
+                            Install <a href="zotero_aria_plugin_setup.html" target="_blank" class="checklist-link">"ARIA" Plugin</a> for Zotero
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">AI-powered analysis of protease research papers</div>
+                        </label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item5">
+                        <label for="item5">
+                            Log into <a href="ai_account_setup.html" target="_blank" class="checklist-link">AI Account</a> (Copilot/ChatGPT/Deepseek)
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">Configure for enzymatic method literature analysis</div>
+                        </label>
+                    </div>
                 </div>
 
-                <div class="prompt-box">
-                    <div class="prompt-text">Compare "enzymatic cleaning" vs "cold plasma" for allergen removal on stainless steel. Find 5 papers that discuss the energy efficiency and cost differences between these methods in Indian or European markets.</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                <div class="card">
+                    <h3>🔗 Connection Protocol</h3>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item6">
+                        <label for="item6">
+                            Link <a href="researchrabbit_zotero_link.html" target="_blank" class="checklist-link">ResearchRabbit to Zotero</a>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">Sync your protease and allergen denaturation collections</div>
+                        </label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item7">
+                        <label for="item7">
+                            Create Zotero Collection: <a href="zotero_collection_setup.html" target="_blank" class="checklist-link">'Epitope Erase Research'</a>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">Organize with subcollections: Enzymes, Surfaces, Validation Methods</div>
+                        </label>
+                    </div>
+                    
+                    <div class="checklist-item">
+                        <input type="checkbox" id="item8">
+                        <label for="item8">
+                            Perform <a href="sync_check.html" target="_blank" class="checklist-link">Sync Check</a>
+                            <div style="font-size: 0.9rem; color: #666; margin-top: 0.3rem;">Verify a paper added in ResearchRabbit appears in Zotero</div>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <span class="tag">Analysis</span>
-                <h3>Prompt 3: The Summary</h3>
-                <div class="prompt-box">
-                    <div class="prompt-text">Summarize these articles. Identify clusters of topics or shifts in focus over time. Note recurring keywords, techniques, and models. Focus heavily on the Discussion and Future Directions sections—highlight any open questions or limitations mentioned.</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+            <!-- Step 2: Literature Search -->
+            <div id="step2" class="section">
+                <div class="section-header">
+                    <h1>Step 2: Literature Search Strategy</h1>
+                    <p class="section-subtitle">Goal: Use AI to comprehensively gather enzymatic allergen denaturation research</p>
+                </div>
+                
+                <div class="research-focus">
+                    <h4>🔍 Search Strategy for Enzymatic Methods</h4>
+                    <p>Focus your searches on: <strong>subtilisin, papain, trypsin, enzymatic cleaning, protein hydrolysis, sprayable enzymes, industrial enzyme applications, allergen residue detection</strong></p>
+                </div>
+
+                <div class="card">
+                    <span class="tag">Basic Search</span>
+                    <h3>Prompt 1: Enzymatic Denaturation Landscape</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-text">Find the 15 most recent scholarly articles (2020-2025) on enzymatic denaturation of food allergens on surfaces. Focus on protease applications (subtilisin, papain, trypsin) for peanut allergen removal. Include studies on enzyme stability, effectiveness on different surfaces (stainless steel, plastic), and industrial application feasibility.</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="tag">Regional & Specific</span>
+                    <h3>Prompt 2: Global Enzymatic Solutions</h3>
+                    <p>Use these prompts to capture international enzymatic cleaning research:</p>
+                    
+                    <div class="prompt-box">
+                        <div class="prompt-text">Find recent studies (2020-2025) on "enzymatic cleaning validation" in food manufacturing within China, India, Australia, and the EU. Specifically look for protease-based cleaning systems, their regulatory acceptance (reference GB 7718 in China, VITAL 3.0 in Australia/EU), and cost-benefit analyses for small-to-medium enterprises (SMEs).</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+
+                    <div class="prompt-box">
+                        <div class="prompt-text">Compare "sprayable enzyme formulations" vs "traditional chemical sanitizers" for allergen removal on food contact surfaces. Find 8 papers that discuss enzymatic foam/spray development, application methods, contact time requirements, and residue testing (ELISA, swab tests) in industrial settings.</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span class="tag">Analysis & Synthesis</span>
+                    <h3>Prompt 3: Enzymatic Method Summary</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-text">Summarize these articles on enzymatic allergen denaturation. Identify: 1) Most effective proteases for peanut allergens, 2) Optimal enzyme concentrations and contact times, 3) Surface material impact on effectiveness, 4) Current limitations (temperature sensitivity, cost, residue concerns), 5) Gaps in sprayable/foam formulation research. Focus on Discussion and Future Directions sections.</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Gaps & Opportunities -->
+            <div id="step3" class="section">
+                <div class="section-header">
+                    <h1>Step 3: Research Gaps & Experiment Design</h1>
+                    <p class="section-subtitle">Goal: Identify the "White Space" for your enzymatic spray development</p>
+                </div>
+
+                <div class="card">
+                    <h3>Prompt 4: Enzymatic Method Gaps</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-text">Identify specific gaps in enzymatic allergen denaturation research. Focus on: 1) Sprayable enzyme formulations for industrial lines, 2) Real-time denaturation verification methods, 3) Cost-effective protease production for SMEs, 4) Enzyme stability in cleaning products, 5) Residual enzyme activity concerns. Highlight gaps relevant to India/China/SMEs with limited resources.</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Prompt 5: Brainstorm Enzymatic Experiment</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-text">Based on identified gaps, help me brainstorm a focused experiment: "Developing a subtilisin-based sprayable foam for peanut allergen denaturation on stainless steel." Include: 1) Hypothesis about optimal enzyme concentration and contact time, 2) Control variables (pH, temperature, surface roughness), 3) Validation methods (ELISA, swabbing, FTIR for structural changes), 4) Practical implementation considerations for food factories.</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📝 Your Enzymatic Research Notes</h3>
+                    <textarea placeholder="Paste AI-generated ideas here... Which enzymatic approach seems most promising? What specific protease and formulation method will you focus on?"></textarea>
+                </div>
+            </div>
+
+            <!-- Step 4: Draft Proposal -->
+            <div id="step4" class="section">
+                <div class="section-header">
+                    <h1>Step 4: Draft Your Research Proposal</h1>
+                    <p class="section-subtitle">Goal: Write a compelling, research-informed proposal for enzymatic allergen denaturation</p>
+                </div>
+
+                <div class="card">
+                    <h3>Prompt 6: Draft Enzymatic Proposal Paragraphs</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-text">Using our brainstormed experiment on subtilisin-based sprayable foam, write key proposal paragraphs:
+1. Opening: Demonstrate knowledge of current enzymatic denaturation research (cite 5-7 recent papers).
+2. Gap Identification: Specifically highlight the lack of sprayable enzyme formulations for industrial use.
+3. Proposed Experiment: Detail "Development of a protease-based foam for peanut allergen removal" with specific aims.
+4. Methodology: ELISA validation, surface swabbing protocols, enzyme activity assays.
+5. Significance: Connect to food safety in US, EU, and Asian markets, emphasizing cost-effectiveness for SMEs.</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Prompt 7: Grant Application Tuning</h3>
+                    <div class="prompt-box">
+                        <div class="prompt-text">Revise my enzymatic denaturation proposal for grant applications. Emphasize: 1) Innovation in sprayable enzyme formulation, 2) Practical implementation in existing food facilities, 3) Cost-benefit analysis vs. chemical methods, 4) Alignment with FDA/EU food safety initiatives, 5) Potential for patentable formulation, 6) Scalability for global markets with focus on India/China.</div>
+                        <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>📄 Final Proposal: "Epitope Erase" Enzymatic System</h3>
+                    <textarea style="height: 300px;" placeholder="Assemble your final proposal text here... Include specific details about your chosen protease, formulation method, and validation approach."></textarea>
                 </div>
             </div>
         </div>
-
-        <div id="step3" class="section">
-            <h1>Step 3: Gaps & Opportunities</h1>
-            <p class="subtitle">Goal: Find the "White Space" where you can contribute.</p>
-
-            <div class="card">
-                <h3>Prompt 4: Identify Gaps</h3>
-                <div class="prompt-box">
-                    <div class="prompt-text">Identify gaps in the current research landscape on allergen and contact surfaces. Specifically, look for gaps regarding "denaturation verification" (how do they prove it's safe?) and "low-resource implementation" (relevant for India/China/SMEs).</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Prompt 5: Brainstorm Experiment</h3>
-                <div class="prompt-box">
-                    <div class="prompt-text">Based on the gaps identified, please help me brainstorm a small, logical experiment I could propose. Frame it as a hypothesis that builds on current work. Suggest how this experiment could be carried out using techniques I can learn (e.g., ELISA, swabbing, basic microscopy).</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>📝 Your Brainstorming Notes</h3>
-                <textarea placeholder="Paste the AI's best ideas here... What gap excites you the most?"></textarea>
-            </div>
-        </div>
-
-        <div id="step4" class="section">
-            <h1>Step 4: Draft Your Proposal</h1>
-            <p class="subtitle">Goal: Write a personalized, research-informed pitch.</p>
-
-            <div class="card">
-                <h3>Prompt 6: Draft Paragraphs</h3>
-                <div class="prompt-box">
-                    <div class="prompt-text">Using the personalized experiment idea we brainstormed, please help me write the key paragraphs for my research proposal. 
-1. Start with a paragraph showing I’ve read recent papers (cite the trends).
-2. Summarize my current direction.
-3. Describe the experiment I’m proposing (Observation -> Question -> Hypothesis).
-4. Explain how it builds on others' work.
-5. Connect my skills/eagerness to contribute. Keep the tone professional.</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>Prompt 7: Grant Application Tuning</h3>
-                <div class="prompt-box">
-                    <div class="prompt-text">Please help me revise my research proposal so it’s optimized for grant applications. Emphasize the significance of the proposed experiment, its feasibility, and how it aligns with broader food safety goals in the US, EU, and Asia. Highlight innovation and potential impact.</div>
-                    <button class="copy-btn" onclick="copyText(this)">📋 Copy Prompt</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>📄 Final Proposal Draft</h3>
-                <textarea style="height: 300px;" placeholder="Assemble your final text here..."></textarea>
-            </div>
-        </div>
-
+    </div>
+    
+    <div class="footer">
+        <p>Epitope Erase Research Portal | Personalized for RogmanDB | Enzymatic Allergen Denaturation Focus</p>
+        <p>© 2025 University Research System | UWP Color Scheme Compliant</p>
     </div>
 
     <script>
+        // Section navigation
         function showSection(id) {
             // Hide all sections
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.remove('active');
+            });
+            
             // Show target section
             document.getElementById(id).classList.add('active');
             
             // Update sidebar buttons
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-        }
-
-        function copyText(btn) {
-            const text = btn.previousElementSibling.innerText;
-            navigator.clipboard.writeText(text);
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('active');
+            });
             
-            const originalText = btn.innerText;
-            btn.innerText = "✅ Copied!";
-            setTimeout(() => {
-                btn.innerText = originalText;
-            }, 2000);
+            event.currentTarget.classList.add('active');
+            
+            // Update progress bar
+            updateProgressBar(id);
         }
+        
+        // Update progress bar based on current section
+        function updateProgressBar(sectionId) {
+            const progressMap = {
+                'step1': 25,
+                'step2': 50,
+                'step3': 75,
+                'step4': 100
+            };
+            
+            const progress = progressMap[sectionId] || 25;
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            progressFill.style.width = `${progress}%`;
+            progressPercent.textContent = `${progress}%`;
+        }
+        
+        // Copy prompt text
+        function copyText(btn) {
+            const promptBox = btn.closest('.prompt-box');
+            const textElement = promptBox.querySelector('.prompt-text');
+            const text = textElement.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = "✅ Copied!";
+                btn.style.backgroundColor = "#43B02A";
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.backgroundColor = "";
+                }, 2000);
+            });
+        }
+        
+        // Initialize progress bar
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgressBar('step1');
+            
+            // Initialize checklist functionality
+            document.querySelectorAll('.checklist-item input').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const label = this.closest('.checklist-item').querySelector('label');
+                    if (this.checked) {
+                        label.style.textDecoration = 'line-through';
+                        label.style.opacity = '0.7';
+                    } else {
+                        label.style.textDecoration = 'none';
+                        label.style.opacity = '1';
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>
